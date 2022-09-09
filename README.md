@@ -1,4 +1,4 @@
-# The course: "_Developing applications using the Spring Framework_"
+# The course: "Developing applications using the Spring Framework"
 
 ## Lab-01
 
