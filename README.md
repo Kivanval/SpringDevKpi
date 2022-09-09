@@ -1,7 +1,8 @@
-#The course: "_Developing applications using the Spring Framework_"
-1. ## Lab 1
+# The course: "_Developing applications using the Spring Framework_"
 
-**On the topic "_First acquaintance with the Spring Framework_"**
+## Lab-01
+
+**On the topic "First acquaintance with the Spring Framework"**
 
 
 This laboratory work is an introduction to the concept and essence of the Spring Framework. After installing JDK, a
