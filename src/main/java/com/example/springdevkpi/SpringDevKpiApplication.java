@@ -16,7 +16,7 @@ public class SpringDevKpiApplication implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         System.out.println("Hello from Spring Boot!");
     }
 }
