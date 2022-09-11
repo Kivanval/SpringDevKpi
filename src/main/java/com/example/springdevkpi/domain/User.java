@@ -1,17 +1,19 @@
 package com.example.springdevkpi.domain;
 
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.FieldDefaults;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
-    Long id;
-    String login;
-    String password;
+    private Long id;
+    private String username;
+    private String password;
 
-    Role role;
+    private Set<Role> roles = new HashSet<>();
+    private Set<Topic> topics = new HashSet<>();
+    private Set<Post> posts = new HashSet<>();
 }
