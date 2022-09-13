@@ -2,28 +2,28 @@ package com.example.springdevkpi.security;
 
 import com.example.springdevkpi.domain.Role;
 import com.example.springdevkpi.domain.User;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 
-public class CustomUserDetails implements UserDetails {
+public class UserDetailsImpl implements UserDetails {
 
     private final User user;
 
-    public CustomUserDetails(User user) {
+    public UserDetailsImpl(User user) {
         this.user = user;
     }
 
+    private static final String ROLE_PREFIX = "ROLE_";
+
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<Role> roles = user.getRoles();
+    public Set<SimpleGrantedAuthority> getAuthorities() {
+        Set<Role> roles = user.getRole().getAllChildRoles();
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
+        roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(ROLE_PREFIX + role.getName())));
         return authorities;
     }
 

@@ -13,7 +13,7 @@ public class User {
     private String username;
     private String password;
 
-    private Set<Role> roles = new HashSet<>();
+    private Role role;
     private Set<Topic> topics = new HashSet<>();
     private Set<Post> posts = new HashSet<>();
 }
