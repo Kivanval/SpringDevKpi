@@ -1,4 +1,4 @@
-package com.example.springdevkpi.service;
+package com.example.springdevkpi.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
