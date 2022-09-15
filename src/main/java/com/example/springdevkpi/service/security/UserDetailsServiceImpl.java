@@ -1,8 +1,8 @@
-package com.example.springdevkpi.service;
+package com.example.springdevkpi.service.security;
 
 import com.example.springdevkpi.data.UserRepository;
 import com.example.springdevkpi.domain.User;
-import com.example.springdevkpi.security.UserDetailsImpl;
+import com.example.springdevkpi.service.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,7 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findUserByEmail(username)
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
         return new UserDetailsImpl(user);
     }

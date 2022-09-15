@@ -1,4 +1,4 @@
-package com.example.springdevkpi.security;
+package com.example.springdevkpi.service.security;
 
 import com.example.springdevkpi.domain.Role;
 import com.example.springdevkpi.domain.User;
@@ -21,8 +21,8 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Set<SimpleGrantedAuthority> getAuthorities() {
-        Set<Role> roles = user.getRole().getAllChildRoles();
-        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        var roles = user.getRole().getAllChildRoles();
+        var authorities = new HashSet<SimpleGrantedAuthority>();
         roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(ROLE_PREFIX + role.getName())));
         return authorities;
     }

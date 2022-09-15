@@ -1,20 +1,54 @@
 package com.example.springdevkpi.domain;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
-@Data
+@Entity
+@Table(name = "TOPICS")
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 public class Topic {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long id;
     private String title;
     private LocalDateTime createdAt;
 
+    @ManyToOne
+    @JoinColumn(name = "creator_id")
     private User creator;
-    private Set<Hashtag> hashtags = new HashSet<>();
-    private Set<Post> posts = new HashSet<>();
+
+    @OneToMany(mappedBy = "topic")
+    @ToString.Exclude
+    private Set<Post> posts = new LinkedHashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "TOPICS_HASHTAGS",
+            joinColumns =  @JoinColumn(name = "topic_id"),
+            inverseJoinColumns = @JoinColumn(name = "hashtag_id"))
+    @ToString.Exclude
+    private Set<Hashtag> hashtags = new LinkedHashSet<>();
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Topic topic = (Topic) o;
+        return id != null && Objects.equals(id, topic.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

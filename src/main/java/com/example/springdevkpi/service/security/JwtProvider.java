@@ -1,7 +1,6 @@
-package com.example.springdevkpi.service;
+package com.example.springdevkpi.service.security;
 
 import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import lombok.extern.slf4j.Slf4j;
@@ -21,10 +20,10 @@ public class JwtProvider {
     @Value("${jwt.issuer}")
     private String jwtIssuer;
 
-    public String generateToken(String login) {
+    public String generateToken(String username) {
         return JWT.create()
                 .withIssuer(jwtIssuer)
-                .withSubject(login)
+                .withSubject(username)
                 .withExpiresAt(LocalDate
                         .now()
                         .plusDays(15)
@@ -36,11 +35,12 @@ public class JwtProvider {
 
     public boolean verifyToken(String token) {
         try {
-            JWTVerifier verifier = JWT.require(Algorithm
+            JWT
+                    .require(Algorithm
                             .HMAC256(jwtSecret))
                     .withIssuer(jwtIssuer)
-                    .build();
-            verifier.verify(token);
+                    .build()
+                    .verify(token);
             return true;
         } catch (JWTVerificationException exception) {
             log.warn("Invalid protocol for token {}", token);
@@ -48,7 +48,7 @@ public class JwtProvider {
         }
     }
 
-    public String getLoginFromToken(String token) {
+    public String getUsernameFromToken(String token) {
         return JWT
                 .require(Algorithm
                         .HMAC256(jwtSecret))
