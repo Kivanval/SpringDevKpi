@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -22,8 +23,7 @@ public class User {
     private Long id;
     private String username;
     private String password;
-    private String email;
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne
     @JoinColumn(name = "role_id")

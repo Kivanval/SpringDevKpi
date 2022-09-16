@@ -1,40 +1,45 @@
 package com.example.springdevkpi.service.security;
 
-import com.example.springdevkpi.domain.Role;
 import com.example.springdevkpi.domain.User;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 public class UserDetailsImpl implements UserDetails {
+    private final String username;
+    private final String password;
 
-    private final User user;
+    private final Set<SimpleGrantedAuthority> authorities;
 
     public UserDetailsImpl(User user) {
-        this.user = user;
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.authorities = user
+                .getRole()
+                .getAllChildRoles()
+                .stream()
+                .map(role -> new SimpleGrantedAuthority(ROLE_PREFIX + role.getName()))
+                .collect(Collectors.toSet());
     }
 
     private static final String ROLE_PREFIX = "ROLE_";
 
     @Override
     public Set<SimpleGrantedAuthority> getAuthorities() {
-        var roles = user.getRole().getAllChildRoles();
-        var authorities = new HashSet<SimpleGrantedAuthority>();
-        roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(ROLE_PREFIX + role.getName())));
         return authorities;
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return username;
     }
 
     @Override

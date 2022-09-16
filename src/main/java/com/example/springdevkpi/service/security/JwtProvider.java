@@ -24,20 +24,16 @@ public class JwtProvider {
         return JWT.create()
                 .withIssuer(jwtIssuer)
                 .withSubject(username)
-                .withExpiresAt(LocalDate
-                        .now()
+                .withExpiresAt(LocalDate.now()
                         .plusDays(15)
                         .atStartOfDay(ZoneId.systemDefault())
                         .toInstant())
-                .sign(Algorithm
-                        .HMAC256(jwtSecret));
+                .sign(Algorithm.HMAC256(jwtSecret));
     }
 
     public boolean verifyToken(String token) {
         try {
-            JWT
-                    .require(Algorithm
-                            .HMAC256(jwtSecret))
+            JWT.require(Algorithm.HMAC256(jwtSecret))
                     .withIssuer(jwtIssuer)
                     .build()
                     .verify(token);
@@ -49,9 +45,7 @@ public class JwtProvider {
     }
 
     public String getUsernameFromToken(String token) {
-        return JWT
-                .require(Algorithm
-                        .HMAC256(jwtSecret))
+        return JWT.require(Algorithm.HMAC256(jwtSecret))
                 .withIssuer(jwtIssuer)
                 .build()
                 .verify(token)
