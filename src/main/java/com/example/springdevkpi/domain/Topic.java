@@ -31,13 +31,6 @@ public class Topic {
     @ToString.Exclude
     private Set<Post> posts = new LinkedHashSet<>();
 
-    @ManyToMany
-    @JoinTable(name = "TOPICS_HASHTAGS",
-            joinColumns =  @JoinColumn(name = "topic_id"),
-            inverseJoinColumns = @JoinColumn(name = "hashtag_id"))
-    @ToString.Exclude
-    private Set<Hashtag> hashtags = new LinkedHashSet<>();
-
 
     @Override
     public boolean equals(Object o) {
