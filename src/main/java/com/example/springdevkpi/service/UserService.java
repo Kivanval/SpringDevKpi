@@ -4,7 +4,6 @@ import com.example.springdevkpi.data.RoleRepository;
 import com.example.springdevkpi.data.UserRepository;
 import com.example.springdevkpi.domain.User;
 import com.example.springdevkpi.web.dto.Credentials;
-import com.example.springdevkpi.web.dto.UserDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -43,7 +42,7 @@ public class UserService {
         return false;
     }
 
-    public User fillCredentials(Credentials credentials) {
+    public User createByCredentials(Credentials credentials) {
         var user = new User();
         user.setUsername(credentials.username());
         user.setPassword(credentials.password());
@@ -81,12 +80,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-
-    public UserDto of(User user) {
-        return new UserDto(
-                user.getId(),
-                user.getUsername(),
-                user.getCreatedAt()
-        );
+    public void deleteByUsername(String username) {
+        userRepository.deleteByUsername(username);
     }
 }

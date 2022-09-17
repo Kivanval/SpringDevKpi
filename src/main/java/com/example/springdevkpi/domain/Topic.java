@@ -21,7 +21,8 @@ public class Topic {
     @Column(nullable = false)
     private Long id;
     private String title;
-    private LocalDateTime createdAt;
+    private String description;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne
     @JoinColumn(name = "creator_id")
@@ -31,6 +32,9 @@ public class Topic {
     @ToString.Exclude
     private Set<Post> posts = new LinkedHashSet<>();
 
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
 
     @Override
     public boolean equals(Object o) {

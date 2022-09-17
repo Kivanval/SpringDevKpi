@@ -21,6 +21,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
+    @Column(nullable = false, unique = true)
     private String username;
     private String password;
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -30,10 +31,12 @@ public class User {
     private Role role;
 
     @OneToMany(mappedBy = "creator")
+    @Setter(AccessLevel.PRIVATE)
     @ToString.Exclude
     private Set<Topic> topics = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "creator")
+    @Setter(AccessLevel.PRIVATE)
     @ToString.Exclude
     private Set<Post> posts = new LinkedHashSet<>();
 

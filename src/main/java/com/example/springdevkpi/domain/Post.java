@@ -19,7 +19,7 @@ public class Post {
     @Column(nullable = false)
     private Long id;
     private String text;
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne
     @JoinColumn(name = "creator_id")
