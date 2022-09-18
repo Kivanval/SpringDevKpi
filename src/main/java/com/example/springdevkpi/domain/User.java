@@ -1,6 +1,7 @@
 package com.example.springdevkpi.domain;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -16,29 +17,30 @@ import java.util.Set;
 @Setter
 @ToString
 @NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Long id;
+    Long id;
     @Column(nullable = false, unique = true)
-    private String username;
-    private String password;
-    private LocalDateTime createdAt = LocalDateTime.now();
+    String username;
+    String password;
+    LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne
     @JoinColumn(name = "role_id")
-    private Role role;
+    Role role;
 
     @OneToMany(mappedBy = "creator")
     @Setter(AccessLevel.PRIVATE)
     @ToString.Exclude
-    private Set<Topic> topics = new LinkedHashSet<>();
+    Set<Topic> topics = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "creator")
     @Setter(AccessLevel.PRIVATE)
     @ToString.Exclude
-    private Set<Post> posts = new LinkedHashSet<>();
+    Set<Post> posts = new LinkedHashSet<>();
 
     @Override
     public boolean equals(Object o) {

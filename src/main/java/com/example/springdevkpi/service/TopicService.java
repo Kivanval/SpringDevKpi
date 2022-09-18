@@ -1,48 +1,45 @@
 package com.example.springdevkpi.service;
 
 import com.example.springdevkpi.data.TopicRepository;
+import com.example.springdevkpi.data.UserRepository;
 import com.example.springdevkpi.domain.Topic;
-import com.example.springdevkpi.domain.User;
 import com.example.springdevkpi.web.dto.TopicBasePayload;
+import lombok.experimental.Delegate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
+@Slf4j
 public class TopicService {
 
+    @Delegate
     private final TopicRepository topicRepository;
 
+    private final UserRepository userRepository;
+
     @Autowired
-    public TopicService(TopicRepository topicRepository) {
+    public TopicService(TopicRepository topicRepository, UserRepository userRepository) {
         this.topicRepository = topicRepository;
+        this.userRepository = userRepository;
     }
 
-    public Topic save(Topic topic) {
+    public Topic create(Topic topic) {
         return topicRepository.save(topic);
     }
 
-    public Topic createFrom(TopicBasePayload payload, User creator) {
+    public boolean create(TopicBasePayload payload) {
+        var optCreator = userRepository.findByUsername(payload.getCreatorUsername());
+        if (optCreator.isEmpty()) {
+            log.warn("Creator by username {} doesn't exists", payload.getCreatorUsername());
+            return false;
+        }
         var topic = new Topic();
-        topic.setTitle(payload.title());
-        topic.setDescription(payload.description());
-        topic.setCreator(creator);
-        return topic;
-    }
-
-    public void deleteById(Long id) {
-        topicRepository.deleteById(id);
-    }
-
-    public Page<Topic> findAll(Pageable pageable) {
-        return topicRepository.findAll(pageable);
-    }
-
-    public Optional<Topic> findById(Long id) {
-        return topicRepository.findById(id);
+        topic.setTitle(payload.getTitle());
+        topic.setDescription(payload.getDescription());
+        topic.setCreator(optCreator.get());
+        topicRepository.save(topic);
+        return true;
     }
 
 

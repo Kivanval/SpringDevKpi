@@ -1,14 +1,13 @@
 package com.example.springdevkpi.domain;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "ROLES")
@@ -16,36 +15,21 @@ import java.util.stream.Collectors;
 @Setter
 @ToString
 @NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Long id;
-    private String name;
+    Long id;
+
+    @Column(nullable = false, unique = true)
+    String name;
+
+    int rank = 1;
 
     @OneToMany(mappedBy = "role")
     @ToString.Exclude
-    private Set<User> users = new LinkedHashSet<>();
-
-    @ManyToMany
-    @JoinTable(name = "ROLE_HIERARCHY",
-            joinColumns =  @JoinColumn(name = "parent_id"),
-            inverseJoinColumns = @JoinColumn(name = "child_id"))
-    @ToString.Exclude
-    private Set<Role> childRoles = new HashSet<>();
-
-    public Set<Role> getAllChildRoles() {
-        Set<Role> copyChildRoles = new HashSet<>(childRoles);
-        Set<Role> allChildRoles = new HashSet<>(copyChildRoles);
-        while (!copyChildRoles.isEmpty()) {
-            copyChildRoles = allChildRoles.stream()
-                    .flatMap(role -> role.getChildRoles().stream())
-                    .peek(allChildRoles::add)
-                    .filter(role -> !role.getChildRoles().isEmpty())
-                    .collect(Collectors.toSet());
-        }
-        return allChildRoles;
-    }
+    Set<User> users = new LinkedHashSet<>();
 
     @Override
     public boolean equals(Object o) {

@@ -1,6 +1,7 @@
 package com.example.springdevkpi.domain;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -15,22 +16,23 @@ import java.util.Set;
 @Setter
 @ToString
 @NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Topic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Long id;
-    private String title;
-    private String description;
-    private LocalDateTime createdAt = LocalDateTime.now();
+    Long id;
+    String title;
+    String description;
+    LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne
     @JoinColumn(name = "creator_id")
-    private User creator;
+    User creator;
 
     @OneToMany(mappedBy = "topic")
     @ToString.Exclude
-    private Set<Post> posts = new LinkedHashSet<>();
+    Set<Post> posts = new LinkedHashSet<>();
 
     public void setCreator(User creator) {
         this.creator = creator;

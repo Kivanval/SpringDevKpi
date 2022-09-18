@@ -4,12 +4,12 @@ import com.example.springdevkpi.data.RoleRepository;
 import com.example.springdevkpi.data.UserRepository;
 import com.example.springdevkpi.domain.User;
 import com.example.springdevkpi.web.dto.Credentials;
+import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
 import java.util.Optional;
 
@@ -17,6 +17,8 @@ import java.util.Optional;
 @Slf4j
 public class UserService {
 
+
+    @Delegate
     private final UserRepository userRepository;
 
     private final RoleRepository roleRepository;
@@ -30,57 +32,37 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public boolean signInUser(User user) {
+    public boolean signUp(Credentials credentials) {
         var optUserRole = roleRepository.findByName("USER");
-        if (optUserRole.isPresent()) {
-            var userRole = optUserRole.get();
-            user.setRole(userRole);
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            return true;
+        if (optUserRole.isEmpty()) {
+            log.warn("Role USER don't exist. Registration have been cancelled");
+            return false;
         }
-        log.warn("Role USER don't exist. Registration have been cancelled");
-        return false;
+        var user = new User();
+        user.setUsername(credentials.getUsername());
+        user.setPassword(passwordEncoder.encode(credentials.getPassword()));
+        var userRole = optUserRole.get();
+        user.setRole(userRole);
+        userRepository.save(user);
+        return true;
     }
 
-    public User createByCredentials(Credentials credentials) {
+    public User map(Credentials credentials) {
         var user = new User();
-        user.setUsername(credentials.username());
-        user.setPassword(credentials.password());
+        user.setPassword(credentials.getPassword());
         return user;
     }
 
-    public Optional<User> findByCredentials(String username, String password) {
-        var optUser = userRepository.findByUsername(username);
+    public Optional<User> findByCredentials(Credentials credentials) {
+        var optUser = userRepository.findByUsername(credentials.getUsername());
         if (optUser.isPresent()) {
             var user = optUser.get();
-            if (passwordEncoder.matches(password, user.getPassword())) {
+            if (passwordEncoder.matches(credentials.getPassword(), user.getPassword())) {
                 return optUser;
             }
         }
         return Optional.empty();
     }
 
-    public Page<User> findAll(Pageable pageable) {
-        return userRepository.findAll(pageable);
-    }
 
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
-    }
-
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-
-    public User save(User user) {
-        return userRepository.save(user);
-    }
-
-    public void deleteById(Long id) {
-        userRepository.deleteById(id);
-    }
-
-    public void deleteByUsername(String username) {
-        userRepository.deleteByUsername(username);
-    }
 }

@@ -1,11 +1,24 @@
 package com.example.springdevkpi.web.dto;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * A DTO for the {@link com.example.springdevkpi.domain.User} entity
  */
-public record UserPayload(Long id, String username, LocalDateTime createdAt, Long roleId) implements Serializable {
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class UserPayload implements Serializable {
+    String username;
+    String roleName;
+    LocalDateTime createdAt;
 }

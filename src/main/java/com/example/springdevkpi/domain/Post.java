@@ -1,6 +1,7 @@
 package com.example.springdevkpi.domain;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -13,21 +14,22 @@ import java.util.Objects;
 @Setter
 @ToString
 @NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Long id;
-    private String text;
-    private LocalDateTime createdAt = LocalDateTime.now();
+    Long id;
+    String text;
+    LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne
     @JoinColumn(name = "creator_id")
-    private User creator;
+    User creator;
 
     @ManyToOne
     @JoinColumn(name = "topic_id")
-    private Topic topic;
+    Topic topic;
 
     @Override
     public boolean equals(Object o) {
