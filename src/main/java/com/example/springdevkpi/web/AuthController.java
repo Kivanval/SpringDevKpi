@@ -1,10 +1,10 @@
 package com.example.springdevkpi.web;
 
 import com.example.springdevkpi.service.UserService;
-import com.example.springdevkpi.service.security.JwtProvider;
-import com.example.springdevkpi.web.dto.Credentials;
-import com.example.springdevkpi.web.dto.JwtToken;
-import com.example.springdevkpi.web.dto.UserPayload;
+import com.example.springdevkpi.security.JwtProvider;
+import com.example.springdevkpi.data.transfer.Credentials;
+import com.example.springdevkpi.data.transfer.JwtToken;
+import com.example.springdevkpi.data.transfer.UserPayload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

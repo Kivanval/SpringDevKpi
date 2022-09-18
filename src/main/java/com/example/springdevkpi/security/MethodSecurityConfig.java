@@ -1,4 +1,4 @@
-package com.example.springdevkpi.service.security;
+package com.example.springdevkpi.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;

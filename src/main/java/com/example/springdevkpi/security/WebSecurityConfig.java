@@ -1,7 +1,8 @@
-package com.example.springdevkpi.service.security;
+package com.example.springdevkpi.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -34,7 +35,8 @@ public class WebSecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/admin/*").hasRole("ADMIN")
-                .antMatchers("/topics/*", "/posts/*").permitAll()
+                .antMatchers(HttpMethod.GET, "/topics/*", "/posts/*").permitAll()
+                .antMatchers(HttpMethod.POST, "/auth/*").permitAll()
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

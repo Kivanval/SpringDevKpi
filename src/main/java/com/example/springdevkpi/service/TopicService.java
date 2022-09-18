@@ -3,7 +3,7 @@ package com.example.springdevkpi.service;
 import com.example.springdevkpi.data.TopicRepository;
 import com.example.springdevkpi.data.UserRepository;
 import com.example.springdevkpi.domain.Topic;
-import com.example.springdevkpi.web.dto.TopicBasePayload;
+import com.example.springdevkpi.data.transfer.TopicBasePayload;
 import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

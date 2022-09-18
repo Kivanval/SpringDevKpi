@@ -1,9 +1,9 @@
 package com.example.springdevkpi.web;
 
 import com.example.springdevkpi.service.PostService;
-import com.example.springdevkpi.web.dto.PostBasePayload;
-import com.example.springdevkpi.web.dto.PostPayload;
-import com.example.springdevkpi.web.dto.TopicPayload;
+import com.example.springdevkpi.data.transfer.PostBasePayload;
+import com.example.springdevkpi.data.transfer.PostPayload;
+import com.example.springdevkpi.data.transfer.TopicPayload;
 import org.hibernate.validator.constraints.Range;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

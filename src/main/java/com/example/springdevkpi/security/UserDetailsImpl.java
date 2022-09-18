@@ -1,4 +1,4 @@
-package com.example.springdevkpi.service.security;
+package com.example.springdevkpi.security;
 
 import com.example.springdevkpi.data.RoleRepository;
 import com.example.springdevkpi.domain.Role;

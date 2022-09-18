@@ -1,4 +1,4 @@
-package com.example.springdevkpi.service.security;
+package com.example.springdevkpi.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

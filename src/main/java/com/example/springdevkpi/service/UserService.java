@@ -3,13 +3,12 @@ package com.example.springdevkpi.service;
 import com.example.springdevkpi.data.RoleRepository;
 import com.example.springdevkpi.data.UserRepository;
 import com.example.springdevkpi.domain.User;
-import com.example.springdevkpi.web.dto.Credentials;
+import com.example.springdevkpi.data.transfer.Credentials;
 import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.webjars.NotFoundException;
 
 import java.util.Optional;
 

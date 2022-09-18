@@ -1,7 +1,8 @@
 package com.example.springdevkpi.web;
 
+import com.example.springdevkpi.data.transfer.*;
 import com.example.springdevkpi.service.UserService;
-import com.example.springdevkpi.service.security.JwtProvider;
+import com.example.springdevkpi.security.JwtProvider;
 import com.example.springdevkpi.web.dto.*;
 import org.hibernate.validator.constraints.Range;
 import org.modelmapper.ModelMapper;

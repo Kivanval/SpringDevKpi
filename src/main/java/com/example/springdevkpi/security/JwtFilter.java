@@ -1,4 +1,4 @@
-package com.example.springdevkpi.service.security;
+package com.example.springdevkpi.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

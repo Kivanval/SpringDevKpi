@@ -3,7 +3,7 @@ package com.example.springdevkpi.service;
 
 import com.example.springdevkpi.data.RoleRepository;
 import com.example.springdevkpi.domain.Role;
-import com.example.springdevkpi.web.dto.RolePayload;
+import com.example.springdevkpi.data.transfer.RolePayload;
 import lombok.experimental.Delegate;
 import org.springframework.stereotype.Service;
 
