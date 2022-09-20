@@ -29,9 +29,9 @@ public class PostService {
     }
 
     public boolean create(PostBasePayload payload) {
-        var optCreator = userRepository.findByUsername(payload.getCreatorName());
+        var optCreator = userRepository.findByUsername(payload.getCreatorUsername());
         if (optCreator.isEmpty()) {
-            log.warn("Creator by username {} doesn't exists", payload.getCreatorName());
+            log.warn("Creator by username {} doesn't exists", payload.getCreatorUsername());
             return false;
         }
         var optTopic = topicRepository.findById(payload.getTopicId());

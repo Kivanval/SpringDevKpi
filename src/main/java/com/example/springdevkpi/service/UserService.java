@@ -4,6 +4,7 @@ import com.example.springdevkpi.data.RoleRepository;
 import com.example.springdevkpi.data.UserRepository;
 import com.example.springdevkpi.domain.User;
 import com.example.springdevkpi.data.transfer.Credentials;
+import com.example.springdevkpi.data.transfer.UserBasePayload;
 import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,12 +47,6 @@ public class UserService {
         return true;
     }
 
-    public User map(Credentials credentials) {
-        var user = new User();
-        user.setPassword(credentials.getPassword());
-        return user;
-    }
-
     public Optional<User> findByCredentials(Credentials credentials) {
         var optUser = userRepository.findByUsername(credentials.getUsername());
         if (optUser.isPresent()) {
@@ -61,6 +56,24 @@ public class UserService {
             }
         }
         return Optional.empty();
+    }
+
+    public boolean updateUser(UserBasePayload payload, String username) {
+        var optUser = userRepository.findByUsername(username);
+        if (optUser.isPresent()) {
+            var user = optUser.get();
+            if (payload.getUsername() != null) {
+                user.setUsername(payload.getUsername());
+            }
+            if (payload.getPassword() != null) {
+                user.setPassword(payload.getPassword());
+            }
+            if (payload.getRoleName() != null) {
+                roleRepository.findByName(payload.getRoleName()).ifPresent(user::setRole);
+            }
+            return true;
+        }
+        return false;
     }
 
 

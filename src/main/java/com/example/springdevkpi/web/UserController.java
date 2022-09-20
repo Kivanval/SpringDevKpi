@@ -1,9 +1,8 @@
 package com.example.springdevkpi.web;
 
 import com.example.springdevkpi.data.transfer.*;
-import com.example.springdevkpi.service.UserService;
 import com.example.springdevkpi.security.JwtProvider;
-import com.example.springdevkpi.web.dto.*;
+import com.example.springdevkpi.service.UserService;
 import org.hibernate.validator.constraints.Range;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,5 +103,13 @@ public class UserController {
             @PathVariable @Size(min = 5, max = 255) final String username) {
         userService.deleteByUsername(username);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{username}")
+    public ResponseEntity<UserPayload> updateUser(
+            @RequestBody @Valid final UserBasePayload payload,
+            @PathVariable @Size(min = 5, max = 255) final String username) {
+        return userService.updateUser(payload, username) ?
+                ResponseEntity.noContent().build() : ResponseEntity.badRequest().build();
     }
 }
