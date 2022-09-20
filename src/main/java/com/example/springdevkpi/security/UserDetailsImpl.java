@@ -1,17 +1,10 @@
 package com.example.springdevkpi.security;
 
-import com.example.springdevkpi.data.RoleRepository;
-import com.example.springdevkpi.domain.Role;
 import com.example.springdevkpi.domain.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 public class UserDetailsImpl implements UserDetails {

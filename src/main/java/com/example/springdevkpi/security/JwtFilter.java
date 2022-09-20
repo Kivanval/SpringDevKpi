@@ -1,5 +1,6 @@
 package com.example.springdevkpi.security;
 
+import com.example.springdevkpi.data.transfer.Credentials;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
