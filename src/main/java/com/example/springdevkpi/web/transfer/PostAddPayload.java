@@ -1,4 +1,4 @@
-package com.example.springdevkpi.data.transfer;
+package com.example.springdevkpi.web.transfer;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PostBasePayload implements Serializable {
+public class PostAddPayload implements Serializable {
     @NotBlank String text;
     @NotNull @Size(min = 5, max = 255) String creatorUsername;
     @Min(1) Long topicId;

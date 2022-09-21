@@ -1,4 +1,4 @@
-package com.example.springdevkpi.data.transfer;
+package com.example.springdevkpi.web.transfer;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AccessLevel;
@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserBasePayload {
+public class UserUpdatePayload {
     @Size(min = 5, max = 255) String username;
     @Size(min = 8, max = 255) String password;
     @NotBlank String roleName;

@@ -1,14 +1,13 @@
 package com.example.springdevkpi.web;
 
-import com.example.springdevkpi.data.transfer.*;
 import com.example.springdevkpi.security.JwtProvider;
 import com.example.springdevkpi.service.UserService;
+import com.example.springdevkpi.web.transfer.*;
 import org.hibernate.validator.constraints.Range;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +41,7 @@ public class UserController {
     private static final String USER_PROPERTIES = "id|username|createdAt|role_id";
 
     @GetMapping("/")
-    public Collection<UserPayload> getUsers(
+    public Collection<UserPayload> getAll(
             @RequestParam(defaultValue = "20") @Range(min = 0, max = 1000) final int size,
             @RequestParam(defaultValue = "0") @Min(0) final int page,
             @RequestParam(defaultValue = "id") @Pattern(regexp = USER_PROPERTIES) final String sortBy) {
@@ -54,7 +53,7 @@ public class UserController {
     }
 
     @GetMapping("/{username}")
-    public ResponseEntity<UserPayload> getUserByUsername(
+    public ResponseEntity<UserPayload> getByUsername(
             @PathVariable @Size(min = 5, max = 255) final String username) {
         var optUser = userService.findByUsername(username);
         return optUser.map(user -> ResponseEntity.ok(modelMapper.map(user, UserPayload.class)))
@@ -81,35 +80,18 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
-    @PostMapping("/sign-up")
-    public ResponseEntity<UserPayload> signUp(@RequestBody @Valid Credentials credentials) {
-        return userService.signUp(credentials) ?
-                ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.internalServerError().build();
-    }
-
-
-    @PostMapping("/sign-in")
-    public ResponseEntity<JwtToken> signIn(@RequestBody @Valid Credentials credentials) {
-        var optUser = userService.findByCredentials(credentials);
-        if (optUser.isPresent()) {
-            var token = jwtProvider.generateToken(optUser.get().getUsername());
-            return ResponseEntity.ok(new JwtToken(token));
-        }
-        return ResponseEntity.badRequest().build();
-    }
-
     @DeleteMapping("/{username}")
-    public ResponseEntity<UserPayload> deleteUserById(
+    public ResponseEntity<UserPayload> deleteById(
             @PathVariable @Size(min = 5, max = 255) final String username) {
         userService.deleteByUsername(username);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{username}")
-    public ResponseEntity<UserPayload> updateUser(
-            @RequestBody @Valid final UserBasePayload payload,
+    public ResponseEntity<UserPayload> update(
+            @RequestBody @Valid final UserUpdatePayload payload,
             @PathVariable @Size(min = 5, max = 255) final String username) {
-        return userService.updateUser(payload, username) ?
+        return userService.update(payload, username) ?
                 ResponseEntity.noContent().build() : ResponseEntity.badRequest().build();
     }
 }

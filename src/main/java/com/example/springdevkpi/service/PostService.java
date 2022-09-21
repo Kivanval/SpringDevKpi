@@ -4,7 +4,9 @@ import com.example.springdevkpi.data.PostRepository;
 import com.example.springdevkpi.data.TopicRepository;
 import com.example.springdevkpi.data.UserRepository;
 import com.example.springdevkpi.domain.Post;
-import com.example.springdevkpi.data.transfer.PostBasePayload;
+import com.example.springdevkpi.web.transfer.PostAddPayload;
+import com.example.springdevkpi.web.transfer.PostUpdatePayload;
+import com.example.springdevkpi.web.transfer.TopicUpdatePayload;
 import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,7 @@ public class PostService {
         this.topicRepository = topicRepository;
     }
 
-    public boolean create(PostBasePayload payload) {
+    public boolean create(PostAddPayload payload) {
         var optCreator = userRepository.findByUsername(payload.getCreatorUsername());
         if (optCreator.isEmpty()) {
             log.warn("Creator by username {} doesn't exists", payload.getCreatorUsername());
@@ -43,5 +45,16 @@ public class PostService {
         post.setText(payload.getText());
         postRepository.save(post);
         return true;
+    }
+
+    public boolean update(PostUpdatePayload payload, long id) {
+        var optPost = postRepository.findById(id);
+        if (optPost.isPresent()) {
+            var post = optPost.get();
+            post.setText(payload.getText());
+            return true;
+        }
+        log.warn("Post by id {} doesn't exists", id);
+        return false;
     }
 }

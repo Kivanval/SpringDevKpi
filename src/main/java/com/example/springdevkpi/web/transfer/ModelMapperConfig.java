@@ -1,4 +1,4 @@
-package com.example.springdevkpi.data.transfer;
+package com.example.springdevkpi.web.transfer;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;

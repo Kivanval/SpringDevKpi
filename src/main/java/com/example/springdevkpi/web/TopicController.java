@@ -1,9 +1,10 @@
 package com.example.springdevkpi.web;
 
 import com.example.springdevkpi.service.TopicService;
-import com.example.springdevkpi.data.transfer.PostPayload;
-import com.example.springdevkpi.data.transfer.TopicBasePayload;
-import com.example.springdevkpi.data.transfer.TopicPayload;
+import com.example.springdevkpi.web.transfer.PostPayload;
+import com.example.springdevkpi.web.transfer.TopicAddPayload;
+import com.example.springdevkpi.web.transfer.TopicPayload;
+import com.example.springdevkpi.web.transfer.TopicUpdatePayload;
 import org.hibernate.validator.constraints.Range;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +35,10 @@ public class TopicController {
         this.modelMapper = modelMapper;
     }
 
-    private static final  String TOPIC_PROPERTIES = "id|title|createdAt|creatorId";
+    private static final String TOPIC_PROPERTIES = "id|title|createdAt|creatorId";
 
     @GetMapping("/")
-    public Collection<TopicPayload> getTopics(
+    public Collection<TopicPayload> getAll(
             @RequestParam(defaultValue = "20") @Range(min = 0, max = 1000) final int size,
             @RequestParam(defaultValue = "0") @Min(0) final int page,
             @RequestParam(defaultValue = "id") @Pattern(regexp = TOPIC_PROPERTIES) final String sortBy) {
@@ -49,7 +50,7 @@ public class TopicController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TopicPayload> getTopicById(
+    public ResponseEntity<TopicPayload> getById(
             @PathVariable @Min(1) final long id) {
         var optTopic = topicService.findById(id);
         return optTopic.map(topic -> ResponseEntity.ok(modelMapper.map(topic, TopicPayload.class)))
@@ -57,7 +58,7 @@ public class TopicController {
     }
 
     @GetMapping("/{id}/posts")
-    public ResponseEntity<Set<PostPayload>> getPostsByUserId(
+    public ResponseEntity<Set<PostPayload>> getByUserId(
             @PathVariable @Min(1) final long id) {
         var optTopic = topicService.findById(id);
         return optTopic.map(topic -> ResponseEntity.ok(topic.getPosts().stream()
@@ -67,18 +68,26 @@ public class TopicController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<TopicPayload> addTopic(
-            @RequestBody @Valid final TopicBasePayload payload) {
+    public ResponseEntity<TopicPayload> addOne(
+            @RequestBody @Valid final TopicAddPayload payload) {
         return topicService.create(payload) ?
                 ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.badRequest().build();
 
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<TopicPayload> deleteTopic(
+    public ResponseEntity<TopicPayload> delete(
             @PathVariable @Min(1) final long id) {
         topicService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<TopicPayload> update(
+            @RequestBody @Valid final TopicUpdatePayload payload,
+            @PathVariable @Min(1) final long id) {
+        return topicService.update(payload, id) ?
+                ResponseEntity.noContent().build() : ResponseEntity.badRequest().build();
     }
 
 

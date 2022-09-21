@@ -3,7 +3,8 @@ package com.example.springdevkpi.service;
 import com.example.springdevkpi.data.TopicRepository;
 import com.example.springdevkpi.data.UserRepository;
 import com.example.springdevkpi.domain.Topic;
-import com.example.springdevkpi.data.transfer.TopicBasePayload;
+import com.example.springdevkpi.web.transfer.TopicAddPayload;
+import com.example.springdevkpi.web.transfer.TopicUpdatePayload;
 import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class TopicService {
         return topicRepository.save(topic);
     }
 
-    public boolean create(TopicBasePayload payload) {
+    public boolean create(TopicAddPayload payload) {
         var optCreator = userRepository.findByUsername(payload.getCreatorUsername());
         if (optCreator.isEmpty()) {
             log.warn("Creator by username {} doesn't exists", payload.getCreatorUsername());
@@ -40,6 +41,22 @@ public class TopicService {
         topic.setCreator(optCreator.get());
         topicRepository.save(topic);
         return true;
+    }
+
+    public boolean update(TopicUpdatePayload payload, long id) {
+        var optTopic = topicRepository.findById(id);
+        if (optTopic.isPresent()) {
+            var topic = optTopic.get();
+            if (payload.getTitle() != null) {
+                topic.setTitle(payload.getTitle());
+            }
+            if (payload.getDescription() != null) {
+                payload.setDescription(payload.getDescription());
+            }
+            return true;
+        }
+        log.warn("Topic by id {} doesn't exists", id);
+        return false;
     }
 
 

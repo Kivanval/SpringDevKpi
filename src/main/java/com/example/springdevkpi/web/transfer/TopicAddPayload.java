@@ -1,5 +1,6 @@
-package com.example.springdevkpi.data.transfer;
+package com.example.springdevkpi.web.transfer;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +18,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TopicBasePayload implements Serializable {
+public class TopicAddPayload implements Serializable {
     @Size(min = 3, max = 255) String title;
     @Size(min = 1, max = 255) String description;
     @Size(min = 5, max = 255) String creatorUsername;

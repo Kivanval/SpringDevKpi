@@ -1,4 +1,4 @@
-package com.example.springdevkpi.data.transfer;
+package com.example.springdevkpi.web.transfer;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

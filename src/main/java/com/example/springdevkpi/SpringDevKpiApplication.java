@@ -1,7 +1,7 @@
 package com.example.springdevkpi;
 
 import com.example.springdevkpi.service.RoleService;
-import com.example.springdevkpi.data.transfer.RolePayload;
+import com.example.springdevkpi.web.transfer.RolePayload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

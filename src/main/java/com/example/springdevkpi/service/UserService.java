@@ -3,8 +3,8 @@ package com.example.springdevkpi.service;
 import com.example.springdevkpi.data.RoleRepository;
 import com.example.springdevkpi.data.UserRepository;
 import com.example.springdevkpi.domain.User;
-import com.example.springdevkpi.data.transfer.Credentials;
-import com.example.springdevkpi.data.transfer.UserBasePayload;
+import com.example.springdevkpi.web.transfer.Credentials;
+import com.example.springdevkpi.web.transfer.UserUpdatePayload;
 import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +58,7 @@ public class UserService {
         return Optional.empty();
     }
 
-    public boolean updateUser(UserBasePayload payload, String username) {
+    public boolean update(UserUpdatePayload payload, String username) {
         var optUser = userRepository.findByUsername(username);
         if (optUser.isPresent()) {
             var user = optUser.get();
@@ -73,6 +73,7 @@ public class UserService {
             }
             return true;
         }
+        log.warn("User by username {} doesn't exists", username);
         return false;
     }
 

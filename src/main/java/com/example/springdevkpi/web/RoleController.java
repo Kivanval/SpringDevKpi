@@ -1,7 +1,9 @@
 package com.example.springdevkpi.web;
 
 import com.example.springdevkpi.service.RoleService;
-import com.example.springdevkpi.data.transfer.RolePayload;
+import com.example.springdevkpi.web.transfer.RoleAddPayload;
+import com.example.springdevkpi.web.transfer.RolePayload;
+import com.example.springdevkpi.web.transfer.RoleUpdatePayload;
 import org.hibernate.validator.constraints.Range;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -34,7 +37,7 @@ public class RoleController {
     private static final String ROLE_PROPERTIES = "id|name";
 
     @GetMapping("/")
-    public Collection<RolePayload> getRoles(
+    public Collection<RolePayload> getAll(
             @RequestParam(defaultValue = "20") @Range(min = 0, max = 1000) final int size,
             @RequestParam(defaultValue = "0") @Min(0) final int page,
             @RequestParam(defaultValue = "id") @Pattern(regexp = ROLE_PROPERTIES) final String sortBy) {
@@ -46,25 +49,33 @@ public class RoleController {
     }
 
     @GetMapping("/{name}")
-    public ResponseEntity<RolePayload> getRoleById(
-            @PathVariable final String name) {
+    public ResponseEntity<RolePayload> getById(
+            @PathVariable @NotBlank final String name) {
         var optRole = roleService.findByName(name);
         return optRole.map(role -> ResponseEntity.ok(modelMapper.map(role, RolePayload.class)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("/")
-    public ResponseEntity<RolePayload> addRole(
+    public ResponseEntity<RolePayload> addOne(
             @RequestBody @Valid final RolePayload payload) {
         return roleService.create(payload) ?
                 ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.internalServerError().build();
     }
 
     @DeleteMapping("/{name}")
-    public ResponseEntity<RolePayload> deleteRoleByName(
-            @PathVariable final String name) {
+    public ResponseEntity<RolePayload> deleteByName(
+            @PathVariable @NotBlank final String name) {
         roleService.deleteByName(name);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{name}")
+    public ResponseEntity<RolePayload> update(
+            @RequestBody @Valid final RoleUpdatePayload payload,
+            @PathVariable @NotBlank final String name) {
+        return roleService.update(payload, name) ?
+                ResponseEntity.noContent().build() : ResponseEntity.badRequest().build();
     }
 
 }

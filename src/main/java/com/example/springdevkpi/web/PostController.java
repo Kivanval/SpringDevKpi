@@ -1,9 +1,7 @@
 package com.example.springdevkpi.web;
 
 import com.example.springdevkpi.service.PostService;
-import com.example.springdevkpi.data.transfer.PostBasePayload;
-import com.example.springdevkpi.data.transfer.PostPayload;
-import com.example.springdevkpi.data.transfer.TopicPayload;
+import com.example.springdevkpi.web.transfer.*;
 import org.hibernate.validator.constraints.Range;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -36,7 +35,7 @@ public class PostController {
     private static final String POST_PROPERTIES = "id|createdAt|creatorId|topicId";
 
     @GetMapping("/")
-    public Collection<PostPayload> getRoles(
+    public Collection<PostPayload> getAll(
             @RequestParam(defaultValue = "20") @Range(min = 0, max = 1000) final int size,
             @RequestParam(defaultValue = "0") @Min(0) final int page,
             @RequestParam(defaultValue = "id") @Pattern(regexp = POST_PROPERTIES) final String sortBy) {
@@ -48,7 +47,7 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PostPayload> getPostById(
+    public ResponseEntity<PostPayload> getById(
             @PathVariable @Min(1) final long id) {
         var optPost = postService.findById(id);
         return optPost.map(post -> ResponseEntity.ok(modelMapper.map(post, PostPayload.class)))
@@ -56,16 +55,24 @@ public class PostController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<PostPayload> addPost(
-            @RequestBody @Valid final PostBasePayload payload) {
+    public ResponseEntity<PostPayload> addOne(
+            @RequestBody @Valid final PostAddPayload payload) {
         return postService.create(payload) ?
                 ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.internalServerError().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<TopicPayload> deleteTopic(
+    public ResponseEntity<PostPayload> delete(
             @PathVariable @Min(1) final long id) {
         postService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<RolePayload> update(
+            @RequestBody @Valid final PostUpdatePayload payload,
+            @PathVariable @Min(1) final long id) {
+        return postService.update(payload, id) ?
+                ResponseEntity.noContent().build() : ResponseEntity.badRequest().build();
     }
 }
