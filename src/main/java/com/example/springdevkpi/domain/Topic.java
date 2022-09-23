@@ -31,11 +31,22 @@ public class Topic {
     User creator;
 
     @OneToMany(mappedBy = "topic")
+    @Setter(AccessLevel.PRIVATE)
     @ToString.Exclude
     Set<Post> posts = new LinkedHashSet<>();
 
-    public void setCreator(User creator) {
-        this.creator = creator;
+    public void addPost(Post post) {
+        if (post != null) {
+            posts.add(post);
+            post.setTopic(this);
+        }
+    }
+
+    public void removePost(Post post) {
+        if (post != null) {
+            posts.remove(post);
+            post.setTopic(null);
+        }
     }
 
     @Override

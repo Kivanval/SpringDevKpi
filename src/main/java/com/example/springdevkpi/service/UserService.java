@@ -2,6 +2,7 @@ package com.example.springdevkpi.service;
 
 import com.example.springdevkpi.data.RoleRepository;
 import com.example.springdevkpi.data.UserRepository;
+import com.example.springdevkpi.domain.Role;
 import com.example.springdevkpi.domain.User;
 import com.example.springdevkpi.web.transfer.Credentials;
 import com.example.springdevkpi.web.transfer.UserUpdatePayload;
@@ -42,7 +43,7 @@ public class UserService {
         user.setUsername(credentials.getUsername());
         user.setPassword(passwordEncoder.encode(credentials.getPassword()));
         var userRole = optUserRole.get();
-        user.setRole(userRole);
+        userRole.addUser(user);
         userRepository.save(user);
         return true;
     }
@@ -69,7 +70,8 @@ public class UserService {
                 user.setPassword(payload.getPassword());
             }
             if (payload.getRoleName() != null) {
-                roleRepository.findByName(payload.getRoleName()).ifPresent(user::setRole);
+                roleRepository.findByName(payload.getRoleName()).
+                        ifPresent(role -> role.addUser(user));
             }
             return true;
         }

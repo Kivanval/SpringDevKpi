@@ -58,7 +58,7 @@ public class PostController {
     public ResponseEntity<PostPayload> addOne(
             @RequestBody @Valid final PostAddPayload payload) {
         return postService.create(payload) ?
-                ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.internalServerError().build();
+                ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/{id}")

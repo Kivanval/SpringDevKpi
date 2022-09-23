@@ -31,6 +31,20 @@ public class Role {
     @ToString.Exclude
     Set<User> users = new LinkedHashSet<>();
 
+    public void addUser(User user) {
+        if (user != null) {
+            users.add(user);
+            user.setRole(this);
+        }
+    }
+
+    public void removeUser(User user) {
+        if (user != null) {
+            users.remove(user);
+            user.setRole(null);
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

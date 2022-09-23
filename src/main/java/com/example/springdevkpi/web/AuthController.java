@@ -33,7 +33,7 @@ public class AuthController {
     @PostMapping("/sign-up")
     public ResponseEntity<UserPayload> signUp(@RequestBody @Valid Credentials credentials) {
         return userService.signUp(credentials) ?
-                ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.internalServerError().build();
+                ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.badRequest().build();
     }
 
 

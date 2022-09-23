@@ -21,6 +21,6 @@ public class TopicPayload implements Serializable {
     Long id;
     String title;
     String description;
-    Long creatorId;
+    Long creatorUsername;
     LocalDateTime createdAt;
 }

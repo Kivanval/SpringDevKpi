@@ -60,7 +60,7 @@ public class RoleController {
     public ResponseEntity<RolePayload> addOne(
             @RequestBody @Valid final RolePayload payload) {
         return roleService.create(payload) ?
-                ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.internalServerError().build();
+                ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/{name}")
