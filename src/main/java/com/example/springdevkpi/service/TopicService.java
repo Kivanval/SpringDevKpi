@@ -5,16 +5,20 @@ import com.example.springdevkpi.data.UserRepository;
 import com.example.springdevkpi.domain.Topic;
 import com.example.springdevkpi.web.transfer.TopicAddPayload;
 import com.example.springdevkpi.web.transfer.TopicUpdatePayload;
-import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @Slf4j
 public class TopicService {
 
-    @Delegate
     private final TopicRepository topicRepository;
 
     private final UserRepository userRepository;
@@ -25,10 +29,7 @@ public class TopicService {
         this.userRepository = userRepository;
     }
 
-    public Topic create(Topic topic) {
-        return topicRepository.save(topic);
-    }
-
+    @Transactional
     public boolean create(TopicAddPayload payload) {
         var optCreator = userRepository.findByUsername(payload.getCreatorUsername());
         if (optCreator.isEmpty()) {
@@ -36,6 +37,7 @@ public class TopicService {
             return false;
         }
         var topic = new Topic();
+        topic.setCreator(optCreator.get());
         topic.setTitle(payload.getTitle());
         topic.setDescription(payload.getDescription());
         topic.setCreator(optCreator.get());
@@ -43,6 +45,7 @@ public class TopicService {
         return true;
     }
 
+    @Transactional
     public boolean update(TopicUpdatePayload payload, long id) {
         var optTopic = topicRepository.findById(id);
         if (optTopic.isPresent()) {
@@ -53,11 +56,22 @@ public class TopicService {
             if (payload.getDescription() != null) {
                 payload.setDescription(payload.getDescription());
             }
+            topicRepository.save(topic);
             return true;
         }
         log.warn("Topic by id {} doesn't exists", id);
         return false;
     }
 
+    public Page<Topic> findAll(Pageable pageable) {
+        return this.topicRepository.findAll(pageable);
+    }
 
+    public Optional<Topic> findById(Long id) {
+        return this.topicRepository.findById(id);
+    }
+
+    public void deleteById(Long id) {
+        this.topicRepository.deleteById(id);
+    }
 }

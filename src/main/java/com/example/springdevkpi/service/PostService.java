@@ -6,17 +6,20 @@ import com.example.springdevkpi.data.UserRepository;
 import com.example.springdevkpi.domain.Post;
 import com.example.springdevkpi.web.transfer.PostAddPayload;
 import com.example.springdevkpi.web.transfer.PostUpdatePayload;
-import com.example.springdevkpi.web.transfer.TopicUpdatePayload;
-import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @Slf4j
 public class PostService {
 
-    @Delegate
     private final PostRepository postRepository;
 
     private final UserRepository userRepository;
@@ -30,6 +33,7 @@ public class PostService {
         this.topicRepository = topicRepository;
     }
 
+    @Transactional
     public boolean create(PostAddPayload payload) {
         var optCreator = userRepository.findByUsername(payload.getCreatorUsername());
         if (optCreator.isEmpty()) {
@@ -42,19 +46,39 @@ public class PostService {
             return false;
         }
         var post = new Post();
+        post.setCreator(optCreator.get());
+        post.setTopic(optTopic.get());
         post.setText(payload.getText());
         postRepository.save(post);
         return true;
     }
 
+    @Transactional
     public boolean update(PostUpdatePayload payload, long id) {
         var optPost = postRepository.findById(id);
         if (optPost.isPresent()) {
             var post = optPost.get();
             post.setText(payload.getText());
+            postRepository.save(post);
             return true;
         }
         log.warn("Post by id {} doesn't exists", id);
         return false;
     }
+
+    @Transactional
+    public Page<Post> findAll(Pageable pageable) {
+        return this.postRepository.findAll(pageable);
+    }
+
+    @Transactional
+    public Optional<Post> findById(Long id) {
+        return this.postRepository.findById(id);
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+        this.postRepository.deleteById(id);
+    }
+
 }

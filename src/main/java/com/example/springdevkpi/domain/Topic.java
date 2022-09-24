@@ -35,20 +35,6 @@ public class Topic {
     @ToString.Exclude
     Set<Post> posts = new LinkedHashSet<>();
 
-    public void addPost(Post post) {
-        if (post != null) {
-            posts.add(post);
-            post.setTopic(this);
-        }
-    }
-
-    public void removePost(Post post) {
-        if (post != null) {
-            posts.remove(post);
-            post.setTopic(null);
-        }
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

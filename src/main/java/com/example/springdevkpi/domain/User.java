@@ -42,35 +42,6 @@ public class User {
     @ToString.Exclude
     Set<Post> posts = new LinkedHashSet<>();
 
-    public void addTopic(Topic topic) {
-        if (topic != null) {
-            topics.add(topic);
-            topic.setCreator(this);
-        }
-    }
-
-    public void removeTopic(Topic topic) {
-        if (topic != null) {
-            topics.remove(topic);
-            topic.setCreator(null);
-        }
-    }
-
-    public void addPost(Post post) {
-        if (post != null) {
-            posts.add(post);
-            post.setCreator(this);
-        }
-    }
-
-    public void removePost(Post post) {
-        if (post != null) {
-            posts.remove(post);
-            post.setCreator(null);
-        }
-    }
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

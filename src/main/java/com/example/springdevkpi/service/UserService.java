@@ -2,15 +2,17 @@ package com.example.springdevkpi.service;
 
 import com.example.springdevkpi.data.RoleRepository;
 import com.example.springdevkpi.data.UserRepository;
-import com.example.springdevkpi.domain.Role;
 import com.example.springdevkpi.domain.User;
 import com.example.springdevkpi.web.transfer.Credentials;
 import com.example.springdevkpi.web.transfer.UserUpdatePayload;
-import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -19,7 +21,6 @@ import java.util.Optional;
 public class UserService {
 
 
-    @Delegate
     private final UserRepository userRepository;
 
     private final RoleRepository roleRepository;
@@ -33,6 +34,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Transactional
     public boolean signUp(Credentials credentials) {
         var optUserRole = roleRepository.findByName("USER");
         if (optUserRole.isEmpty()) {
@@ -43,11 +45,12 @@ public class UserService {
         user.setUsername(credentials.getUsername());
         user.setPassword(passwordEncoder.encode(credentials.getPassword()));
         var userRole = optUserRole.get();
-        userRole.addUser(user);
+        user.setRole(userRole);
         userRepository.save(user);
         return true;
     }
 
+    @Transactional
     public Optional<User> findByCredentials(Credentials credentials) {
         var optUser = userRepository.findByUsername(credentials.getUsername());
         if (optUser.isPresent()) {
@@ -59,6 +62,7 @@ public class UserService {
         return Optional.empty();
     }
 
+    @Transactional
     public boolean update(UserUpdatePayload payload, String username) {
         var optUser = userRepository.findByUsername(username);
         if (optUser.isPresent()) {
@@ -71,8 +75,9 @@ public class UserService {
             }
             if (payload.getRoleName() != null) {
                 roleRepository.findByName(payload.getRoleName()).
-                        ifPresent(role -> role.addUser(user));
+                        ifPresent(user::setRole);
             }
+            userRepository.save(user);
             return true;
         }
         log.warn("User by username {} doesn't exists", username);
@@ -80,4 +85,19 @@ public class UserService {
     }
 
 
+    @Transactional
+    public Optional<User> findByUsername(String email) {
+        return this.userRepository.findByUsername(email);
+    }
+
+
+    @Transactional
+    public void deleteByUsername(String username) {
+        this.userRepository.deleteByUsername(username);
+    }
+
+    @Transactional
+    public Page<User> findAll(Pageable pageable) {
+        return this.userRepository.findAll(pageable);
+    }
 }

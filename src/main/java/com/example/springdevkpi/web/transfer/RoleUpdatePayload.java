@@ -7,6 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+
 /**
  * A DTO for the {@link com.example.springdevkpi.domain.Role} entity
  */
@@ -17,6 +20,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RoleUpdatePayload {
-    String name;
-    Integer rank;
+    @NotBlank String name;
+    @Min(1) Integer rank = 1;
 }

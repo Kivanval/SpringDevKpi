@@ -58,7 +58,7 @@ public class RoleController {
 
     @PostMapping("/")
     public ResponseEntity<RolePayload> addOne(
-            @RequestBody @Valid final RolePayload payload) {
+            @RequestBody @Valid final RoleAddPayload payload) {
         return roleService.create(payload) ?
                 ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.badRequest().build();
     }
