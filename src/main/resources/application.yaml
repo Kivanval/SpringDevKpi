@@ -7,7 +7,7 @@ spring:
   jpa:
     generate-ddl: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
 jwt:
   secret: B7B52D018521488FE2D61661B53E5C432E5076AD68FE67DEBCFEE213EE6ED848

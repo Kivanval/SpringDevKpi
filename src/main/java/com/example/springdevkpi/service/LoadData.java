@@ -2,7 +2,6 @@ package com.example.springdevkpi.service;
 
 import com.example.springdevkpi.web.transfer.Credentials;
 import com.example.springdevkpi.web.transfer.RoleAddPayload;
-import com.example.springdevkpi.web.transfer.RolePayload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;

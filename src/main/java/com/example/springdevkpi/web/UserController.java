@@ -28,14 +28,11 @@ public class UserController {
 
     private final ModelMapper modelMapper;
 
-    private final JwtProvider jwtProvider;
-
 
     @Autowired
-    public UserController(UserService userService, ModelMapper modelMapper, JwtProvider jwtProvider) {
+    public UserController(UserService userService, ModelMapper modelMapper) {
         this.userService = userService;
         this.modelMapper = modelMapper;
-        this.jwtProvider = jwtProvider;
     }
 
     private static final String USER_PROPERTIES = "id|username|createdAt|role_id";

@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Data
@@ -18,5 +17,5 @@ import javax.validation.constraints.Size;
 public class UserUpdatePayload {
     @Size(min = 5, max = 255) String username;
     @Size(min = 8, max = 255) String password;
-    @NotBlank String roleName;
+    @Size(min = 3, max = 255) String roleName;
 }

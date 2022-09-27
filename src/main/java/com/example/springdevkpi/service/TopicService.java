@@ -54,7 +54,7 @@ public class TopicService {
                 topic.setTitle(payload.getTitle());
             }
             if (payload.getDescription() != null) {
-                payload.setDescription(payload.getDescription());
+                topic.setDescription(payload.getDescription());
             }
             topicRepository.save(topic);
             return true;

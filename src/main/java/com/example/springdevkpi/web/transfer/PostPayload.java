@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 public class PostPayload implements Serializable {
     Long id;
     String text;
-    Long creatorUsername;
+    String creatorUsername;
     Long topicId;
     LocalDateTime createdAt;
 }
