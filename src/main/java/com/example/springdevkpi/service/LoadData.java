@@ -23,6 +23,7 @@ public class LoadData implements CommandLineRunner {
     public void run(String... args) {
         roleService.create(new RoleAddPayload("USER", 1));
         roleService.create(new RoleAddPayload("ADMIN", 2));
+        roleService.create(new RoleAddPayload("SUPER_ADMIN", 3));
         userService.signUp(new Credentials("kivanval", "12345678"));
         userService.signUp(new Credentials("bhurov", "qwerty123"));
         userService.signUp(new Credentials("myryta228", "8642ruchka"));

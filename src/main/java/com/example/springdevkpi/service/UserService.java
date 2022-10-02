@@ -71,7 +71,7 @@ public class UserService {
                 user.setUsername(payload.getUsername());
             }
             if (payload.getPassword() != null) {
-                user.setPassword(payload.getPassword());
+                user.setPassword(passwordEncoder.encode(payload.getPassword()));
             }
             if (payload.getRoleName() != null) {
                 roleRepository.findByName(payload.getRoleName()).
@@ -86,18 +86,19 @@ public class UserService {
 
 
     @Transactional
-    public Optional<User> findByUsername(String email) {
-        return this.userRepository.findByUsername(email);
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
 
     @Transactional
     public void deleteByUsername(String username) {
-        this.userRepository.deleteByUsername(username);
+        if (userRepository.existsByUsername(username))
+            userRepository.deleteByUsername(username);
     }
 
     @Transactional
     public Page<User> findAll(Pageable pageable) {
-        return this.userRepository.findAll(pageable);
+        return userRepository.findAll(pageable);
     }
 }

@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,7 +47,7 @@ public class PostService {
         var post = new Post();
         post.setCreator(optCreator.get());
         post.setTopic(optTopic.get());
-        post.setText(payload.getText());
+        post.setText(payload.getText().strip());
         postRepository.save(post);
         return true;
     }
@@ -58,7 +57,7 @@ public class PostService {
         var optPost = postRepository.findById(id);
         if (optPost.isPresent()) {
             var post = optPost.get();
-            post.setText(payload.getText());
+            post.setText(payload.getText().strip());
             postRepository.save(post);
             return true;
         }
@@ -68,17 +67,18 @@ public class PostService {
 
     @Transactional
     public Page<Post> findAll(Pageable pageable) {
-        return this.postRepository.findAll(pageable);
+        return postRepository.findAll(pageable);
     }
 
     @Transactional
     public Optional<Post> findById(Long id) {
-        return this.postRepository.findById(id);
+        return postRepository.findById(id);
     }
 
     @Transactional
     public void deleteById(Long id) {
-        this.postRepository.deleteById(id);
+        if (postRepository.existsById(id))
+            postRepository.deleteById(id);
     }
 
 }

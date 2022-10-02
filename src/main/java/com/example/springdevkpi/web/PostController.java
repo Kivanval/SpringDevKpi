@@ -51,7 +51,7 @@ public class PostController {
             @PathVariable @Min(1) final long id) {
         var optPost = postService.findById(id);
         return optPost.map(post -> ResponseEntity.ok(modelMapper.map(post, PostPayload.class)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @PostMapping("/")

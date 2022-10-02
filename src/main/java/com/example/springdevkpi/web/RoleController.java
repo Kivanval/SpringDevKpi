@@ -53,7 +53,7 @@ public class RoleController {
             @PathVariable @NotBlank final String name) {
         var optRole = roleService.findByName(name);
         return optRole.map(role -> ResponseEntity.ok(modelMapper.map(role, RolePayload.class)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @PostMapping("/")

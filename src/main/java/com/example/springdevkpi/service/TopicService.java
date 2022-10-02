@@ -38,8 +38,8 @@ public class TopicService {
         }
         var topic = new Topic();
         topic.setCreator(optCreator.get());
-        topic.setTitle(payload.getTitle());
-        topic.setDescription(payload.getDescription());
+        topic.setTitle(payload.getTitle().strip());
+        topic.setDescription(payload.getDescription().strip());
         topic.setCreator(optCreator.get());
         topicRepository.save(topic);
         return true;
@@ -51,10 +51,10 @@ public class TopicService {
         if (optTopic.isPresent()) {
             var topic = optTopic.get();
             if (payload.getTitle() != null) {
-                topic.setTitle(payload.getTitle());
+                topic.setTitle(payload.getTitle().strip());
             }
             if (payload.getDescription() != null) {
-                topic.setDescription(payload.getDescription());
+                topic.setDescription(payload.getDescription().strip());
             }
             topicRepository.save(topic);
             return true;
@@ -64,14 +64,15 @@ public class TopicService {
     }
 
     public Page<Topic> findAll(Pageable pageable) {
-        return this.topicRepository.findAll(pageable);
+        return topicRepository.findAll(pageable);
     }
 
     public Optional<Topic> findById(Long id) {
-        return this.topicRepository.findById(id);
+        return topicRepository.findById(id);
     }
 
     public void deleteById(Long id) {
-        this.topicRepository.deleteById(id);
+        if (topicRepository.existsById(id))
+            topicRepository.deleteById(id);
     }
 }

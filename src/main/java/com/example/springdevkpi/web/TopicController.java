@@ -54,7 +54,7 @@ public class TopicController {
             @PathVariable @Min(1) final long id) {
         var optTopic = topicService.findById(id);
         return optTopic.map(topic -> ResponseEntity.ok(modelMapper.map(topic, TopicPayload.class)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @GetMapping("/{id}/posts")

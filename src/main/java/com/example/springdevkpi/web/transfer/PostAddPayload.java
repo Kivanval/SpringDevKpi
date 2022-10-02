@@ -6,10 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 
 /**
@@ -22,6 +19,6 @@ import java.io.Serializable;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PostAddPayload implements Serializable {
     @NotBlank String text;
-    @NotNull @Size(min = 5, max = 255) String creatorUsername;
+    @NotNull @Size(min = 5, max = 255) @Pattern(regexp = "^\\S+$") String creatorUsername;
     @Min(1) Long topicId;
 }

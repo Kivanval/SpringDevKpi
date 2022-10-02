@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Data
@@ -15,7 +16,7 @@ import javax.validation.constraints.Size;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserUpdatePayload {
-    @Size(min = 5, max = 255) String username;
-    @Size(min = 8, max = 255) String password;
-    @Size(min = 3, max = 255) String roleName;
+    @Size(min = 5, max = 255) @Pattern(regexp = "^\\S+$") String username;
+    @Size(min = 8, max = 255) @Pattern(regexp = "^\\S+$") String password;
+    @Size(min = 3, max = 255) @Pattern(regexp = "^\\S+$") String roleName;
 }

@@ -54,7 +54,7 @@ public class UserController {
             @PathVariable @Size(min = 5, max = 255) final String username) {
         var optUser = userService.findByUsername(username);
         return optUser.map(user -> ResponseEntity.ok(modelMapper.map(user, UserPayload.class)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @GetMapping("/{username}/topics")

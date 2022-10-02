@@ -1,12 +1,12 @@
 package com.example.springdevkpi.web.transfer;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -21,5 +21,5 @@ import java.io.Serializable;
 public class TopicAddPayload implements Serializable {
     @Size(min = 3, max = 255) String title;
     @Size(min = 1, max = 255) String description;
-    @Size(min = 5, max = 255) String creatorUsername;
+    @Size(min = 5, max = 255) @Pattern(regexp = "^\\S+$") String creatorUsername;
 }

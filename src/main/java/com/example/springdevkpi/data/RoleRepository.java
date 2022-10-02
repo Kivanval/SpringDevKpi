@@ -15,4 +15,6 @@ public interface RoleRepository
     void deleteByName(String name);
 
     Collection<Role> findByRankLessThan(int rank);
+
+    boolean existsByName(String name);
 }

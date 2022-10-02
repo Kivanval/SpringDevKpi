@@ -12,4 +12,6 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 
     void deleteByUsername(String username);
 
+    boolean existsByUsername(String username);
+
 }

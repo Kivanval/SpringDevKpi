@@ -38,7 +38,7 @@ public class RoleService {
         if (optRole.isPresent()) {
             var role = optRole.get();
             if (payload.getName() != null) {
-                role.setName(payload.getName());
+                role.setName(payload.getName().toUpperCase());
             }
             if (payload.getRank() != null) {
                 role.setRank(payload.getRank());
@@ -52,16 +52,17 @@ public class RoleService {
 
     @Transactional
     public Optional<Role> findByName(String name) {
-        return this.roleRepository.findByName(name);
+        return roleRepository.findByName(name);
     }
 
     @Transactional
     public void deleteByName(String name) {
-        this.roleRepository.deleteByName(name);
+        if (roleRepository.existsByName(name))
+            this.roleRepository.deleteByName(name);
     }
 
     @Transactional
     public Page<Role> findAll(Pageable pageable) {
-        return this.roleRepository.findAll(pageable);
+        return roleRepository.findAll(pageable);
     }
 }
