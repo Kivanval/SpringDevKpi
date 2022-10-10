@@ -1,4 +1,4 @@
-package com.example.springdevkpi.web.transfer;
+package com.example.springdevkpi.web.data.transfer;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AccessLevel;
@@ -7,19 +7,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
-
-/**
- * A DTO for the {@link com.example.springdevkpi.domain.Topic} entity
- */
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TopicUpdatePayload implements Serializable {
-    @Size(min = 3, max = 255) String title;
-    @Size(min = 1, max = 255) String description;
+public class UserUpdatePayload {
+    @Size(min = 5, max = 255) @Pattern(regexp = "^\\S+$") String username;
+    @Size(min = 8, max = 255) @Pattern(regexp = "^\\S+$") String password;
+    @Size(min = 3, max = 255) @Pattern(regexp = "^\\S+$") String roleName;
 }

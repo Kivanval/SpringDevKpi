@@ -1,4 +1,4 @@
-package com.example.springdevkpi.web.transfer;
+package com.example.springdevkpi.web.data.transfer;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -10,15 +10,17 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * A DTO for the {@link com.example.springdevkpi.domain.User} entity
+ * A DTO for the {@link com.example.springdevkpi.domain.Topic} entity
  */
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserPayload implements Serializable {
-    String username;
-    String roleName;
+public class TopicPayload implements Serializable {
+    Long id;
+    String title;
+    String description;
+    String creatorUsername;
     LocalDateTime createdAt;
 }

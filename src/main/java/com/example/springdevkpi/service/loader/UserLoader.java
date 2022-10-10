@@ -1,6 +1,7 @@
-package com.example.springdevkpi.service;
+package com.example.springdevkpi.service.loader;
 
-import com.example.springdevkpi.web.transfer.Credentials;
+import com.example.springdevkpi.service.UserService;
+import com.example.springdevkpi.web.data.transfer.Credentials;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
@@ -8,12 +9,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Order(2)
-public class LoadUserData implements CommandLineRunner {
+public class UserLoader implements CommandLineRunner {
 
     private final UserService userService;
 
     @Autowired
-    public LoadUserData(UserService userService) {
+    public UserLoader(UserService userService) {
         this.userService = userService;
     }
 

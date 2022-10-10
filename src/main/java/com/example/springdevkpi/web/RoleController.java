@@ -1,9 +1,9 @@
 package com.example.springdevkpi.web;
 
 import com.example.springdevkpi.service.RoleService;
-import com.example.springdevkpi.web.transfer.RoleAddPayload;
-import com.example.springdevkpi.web.transfer.RolePayload;
-import com.example.springdevkpi.web.transfer.RoleUpdatePayload;
+import com.example.springdevkpi.web.data.transfer.RoleAddPayload;
+import com.example.springdevkpi.web.data.transfer.RolePayload;
+import com.example.springdevkpi.web.data.transfer.RoleUpdatePayload;
 import org.hibernate.validator.constraints.Range;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

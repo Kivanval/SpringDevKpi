@@ -1,6 +1,10 @@
 package com.example.springdevkpi.web;
 
 import com.example.springdevkpi.service.PostService;
+import com.example.springdevkpi.web.data.transfer.PostAddPayload;
+import com.example.springdevkpi.web.data.transfer.PostPayload;
+import com.example.springdevkpi.web.data.transfer.PostUpdatePayload;
+import com.example.springdevkpi.web.data.transfer.RolePayload;
 import com.example.springdevkpi.web.transfer.*;
 import org.hibernate.validator.constraints.Range;
 import org.modelmapper.ModelMapper;
@@ -13,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.Collection;
 import java.util.stream.Collectors;

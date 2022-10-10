@@ -1,10 +1,10 @@
 package com.example.springdevkpi.web;
 
 import com.example.springdevkpi.service.TopicService;
-import com.example.springdevkpi.web.transfer.PostPayload;
-import com.example.springdevkpi.web.transfer.TopicAddPayload;
-import com.example.springdevkpi.web.transfer.TopicPayload;
-import com.example.springdevkpi.web.transfer.TopicUpdatePayload;
+import com.example.springdevkpi.web.data.transfer.PostPayload;
+import com.example.springdevkpi.web.data.transfer.TopicAddPayload;
+import com.example.springdevkpi.web.data.transfer.TopicPayload;
+import com.example.springdevkpi.web.data.transfer.TopicUpdatePayload;
 import org.hibernate.validator.constraints.Range;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

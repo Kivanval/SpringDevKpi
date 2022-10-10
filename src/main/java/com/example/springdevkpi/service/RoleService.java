@@ -3,8 +3,8 @@ package com.example.springdevkpi.service;
 
 import com.example.springdevkpi.data.RoleRepository;
 import com.example.springdevkpi.domain.Role;
-import com.example.springdevkpi.web.transfer.RoleAddPayload;
-import com.example.springdevkpi.web.transfer.RoleUpdatePayload;
+import com.example.springdevkpi.web.data.transfer.RoleAddPayload;
+import com.example.springdevkpi.web.data.transfer.RoleUpdatePayload;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
