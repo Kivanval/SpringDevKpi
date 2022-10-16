@@ -7,7 +7,9 @@ import com.example.springdevkpi.web.data.transfer.RoleAddPayload;
 import com.example.springdevkpi.web.data.transfer.RoleUpdatePayload;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,7 +64,8 @@ public class RoleService {
     }
 
     @Transactional
-    public Page<Role> findAll(Pageable pageable) {
+    public Page<Role> findAll(int page, int size, String sortBy) {
+        Pageable pageable = PageRequest.of(page, size).withSort(Sort.by(sortBy).descending());
         return roleRepository.findAll(pageable);
     }
 }

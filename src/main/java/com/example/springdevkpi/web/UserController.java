@@ -8,8 +8,6 @@ import com.example.springdevkpi.web.data.transfer.UserUpdatePayload;
 import org.hibernate.validator.constraints.Range;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,11 +38,10 @@ public class UserController {
 
     @GetMapping("/")
     public Collection<UserPayload> getAll(
-            @RequestParam(defaultValue = "20") @Range(min = 0, max = 1000) final int size,
             @RequestParam(defaultValue = "0") @Min(0) final int page,
+            @RequestParam(defaultValue = "20") @Range(min = 0, max = 1000) final int size,
             @RequestParam(defaultValue = "username") @Pattern(regexp = USER_PROPERTIES) final String sortBy) {
-        return userService.findAll(PageRequest.of(page, size)
-                        .withSort(Sort.by(sortBy)))
+        return userService.findAll(page, size, sortBy)
                 .stream()
                 .map(user -> modelMapper.map(user, UserPayload.class))
                 .collect(Collectors.toSet());

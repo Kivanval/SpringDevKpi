@@ -25,5 +25,4 @@ public class UserLoader implements CommandLineRunner {
         userService.signUp(new Credentials("bhurov", "qwerty123"), DefaultRoles.ADMIN);
         userService.signUp(new Credentials("nikitochkaa", "8642ruchka"), DefaultRoles.SUPER_ADMIN);
     }
-
 }

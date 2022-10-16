@@ -9,7 +9,9 @@ import com.example.springdevkpi.web.data.transfer.UserUpdatePayload;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -104,7 +106,8 @@ public class UserService {
     }
 
     @Transactional
-    public Page<User> findAll(Pageable pageable) {
+    public Page<User> findAll(int page, int size, String sortBy) {
+        Pageable pageable = PageRequest.of(page, size).withSort(Sort.by(sortBy).descending());
         return userRepository.findAll(pageable);
     }
 }
