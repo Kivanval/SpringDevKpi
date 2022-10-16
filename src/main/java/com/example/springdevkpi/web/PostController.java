@@ -5,12 +5,9 @@ import com.example.springdevkpi.web.data.transfer.PostAddPayload;
 import com.example.springdevkpi.web.data.transfer.PostPayload;
 import com.example.springdevkpi.web.data.transfer.PostUpdatePayload;
 import com.example.springdevkpi.web.data.transfer.RolePayload;
-import com.example.springdevkpi.web.transfer.*;
 import org.hibernate.validator.constraints.Range;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,15 +35,14 @@ public class PostController {
     private static final String POST_PROPERTIES = "id|createdAt|creatorId|topicId";
 
     @GetMapping("/")
-    public Collection<PostPayload> getAll(
-            @RequestParam(defaultValue = "20") @Range(min = 0, max = 1000) final int size,
+    public ResponseEntity<Collection<PostPayload>> getAll(
             @RequestParam(defaultValue = "0") @Min(0) final int page,
+            @RequestParam(defaultValue = "20") @Range(min = 0, max = 1000) final int size,
             @RequestParam(defaultValue = "id") @Pattern(regexp = POST_PROPERTIES) final String sortBy) {
-        return postService.findAll(PageRequest.of(page, size)
-                        .withSort(Sort.by(sortBy)))
-                .stream()
+        return ResponseEntity.ok(postService.findAll(page, size, sortBy).get()
                 .map(post -> modelMapper.map(post, PostPayload.class))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toSet())
+        );
     }
 
     @GetMapping("/{id}")

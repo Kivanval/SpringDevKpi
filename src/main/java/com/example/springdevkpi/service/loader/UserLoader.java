@@ -1,5 +1,6 @@
 package com.example.springdevkpi.service.loader;
 
+import com.example.springdevkpi.service.DefaultRoles;
 import com.example.springdevkpi.service.UserService;
 import com.example.springdevkpi.web.data.transfer.Credentials;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,8 @@ public class UserLoader implements CommandLineRunner {
     @Override
     public void run(String... args) {
         userService.signUp(new Credentials("kivanval", "12345678"));
-        userService.signUp(new Credentials("bhurov", "qwerty123"));
-        userService.signUp(new Credentials("mykyta228", "8642ruchka"));
+        userService.signUp(new Credentials("bhurov", "qwerty123"), DefaultRoles.ADMIN);
+        userService.signUp(new Credentials("nikitochkaa", "8642ruchka"), DefaultRoles.SUPER_ADMIN);
     }
 
 }

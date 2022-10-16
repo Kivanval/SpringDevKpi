@@ -62,16 +62,19 @@ public class TopicService {
         return false;
     }
 
-    public Page<Topic> findAll(Pageable pageable) {
-        return topicRepository.findAll(pageable);
-    }
-
+    @Transactional
     public Optional<Topic> findById(Long id) {
         return topicRepository.findById(id);
     }
 
+    @Transactional
     public void deleteById(Long id) {
         if (topicRepository.existsById(id))
             topicRepository.deleteById(id);
+    }
+
+    @Transactional
+    public Page<Topic> findAll(Pageable pageable) {
+        return topicRepository.findAll(pageable);
     }
 }

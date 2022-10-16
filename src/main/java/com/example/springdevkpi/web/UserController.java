@@ -5,7 +5,6 @@ import com.example.springdevkpi.web.data.transfer.PostPayload;
 import com.example.springdevkpi.web.data.transfer.TopicPayload;
 import com.example.springdevkpi.web.data.transfer.UserPayload;
 import com.example.springdevkpi.web.data.transfer.UserUpdatePayload;
-import com.example.springdevkpi.web.transfer.*;
 import org.hibernate.validator.constraints.Range;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,6 @@ public class UserController {
 
     private final ModelMapper modelMapper;
 
-
     @Autowired
     public UserController(UserService userService, ModelMapper modelMapper) {
         this.userService = userService;
@@ -44,7 +42,7 @@ public class UserController {
     public Collection<UserPayload> getAll(
             @RequestParam(defaultValue = "20") @Range(min = 0, max = 1000) final int size,
             @RequestParam(defaultValue = "0") @Min(0) final int page,
-            @RequestParam(defaultValue = "id") @Pattern(regexp = USER_PROPERTIES) final String sortBy) {
+            @RequestParam(defaultValue = "username") @Pattern(regexp = USER_PROPERTIES) final String sortBy) {
         return userService.findAll(PageRequest.of(page, size)
                         .withSort(Sort.by(sortBy)))
                 .stream()

@@ -1,5 +1,6 @@
 package com.example.springdevkpi.service.loader;
 
+import com.example.springdevkpi.service.DefaultRoles;
 import com.example.springdevkpi.service.RoleService;
 import com.example.springdevkpi.web.data.transfer.RoleAddPayload;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,8 @@ public class RoleLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        roleService.create(new RoleAddPayload("USER", 1));
-        roleService.create(new RoleAddPayload("ADMIN", 2));
-        roleService.create(new RoleAddPayload("SUPER_ADMIN", 3));
+        roleService.create(new RoleAddPayload(DefaultRoles.USER, 1));
+        roleService.create(new RoleAddPayload(DefaultRoles.ADMIN, 2));
+        roleService.create(new RoleAddPayload(DefaultRoles.SUPER_ADMIN, 3));
     }
 }

@@ -1,14 +1,9 @@
 package com.example.springdevkpi.web.data.transfer;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link com.example.springdevkpi.domain.Role} entity
@@ -18,6 +13,6 @@ import javax.validation.constraints.Pattern;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RoleAddPayload {
-    @NotBlank @Pattern(regexp = "^\\S+$") String name;
+    @NotNull @Size(min = 3, max = 255) @Pattern(regexp = "^\\S+$") String name;
     @Min(1) Integer rank = 1;
 }

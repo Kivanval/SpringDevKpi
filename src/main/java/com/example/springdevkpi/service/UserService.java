@@ -3,6 +3,7 @@ package com.example.springdevkpi.service;
 import com.example.springdevkpi.data.RoleRepository;
 import com.example.springdevkpi.data.UserRepository;
 import com.example.springdevkpi.domain.User;
+import com.example.springdevkpi.exception.RoleNotDefException;
 import com.example.springdevkpi.web.data.transfer.Credentials;
 import com.example.springdevkpi.web.data.transfer.UserUpdatePayload;
 import lombok.extern.slf4j.Slf4j;
@@ -34,12 +35,13 @@ public class UserService {
     }
 
     @Transactional
-    public boolean signUp(Credentials credentials) {
-        var optUserRole = roleRepository.findByName("USER");
+    public boolean signUp(Credentials credentials, String roleName) {
+        var optUserRole = roleRepository.findByName(roleName);
         if (optUserRole.isEmpty()) {
-            log.warn("Role USER don't exist. Registration have been cancelled");
-            return false;
+            log.warn("Role {} don't exist. Registration have been cancelled", roleName);
+            throw new RoleNotDefException();
         }
+        if (userRepository.existsByUsername(credentials.getUsername())) return false;
         var user = new User();
         user.setUsername(credentials.getUsername());
         user.setPassword(passwordEncoder.encode(credentials.getPassword()));
@@ -47,6 +49,11 @@ public class UserService {
         user.setRole(userRole);
         userRepository.save(user);
         return true;
+    }
+
+    @Transactional
+    public boolean signUp(Credentials credentials) {
+        return signUp(credentials, DefaultRoles.USER);
     }
 
     @Transactional
