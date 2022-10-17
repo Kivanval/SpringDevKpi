@@ -15,9 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
-import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Comparator;
+import java.util.List;
 
 @RestController
 @RequestMapping("/topics")
@@ -36,14 +35,14 @@ public class TopicController {
     private static final String TOPIC_PROPERTIES = "id|title|createdAt|creatorId";
 
     @GetMapping("/")
-    public Collection<TopicPayload> getAll(
+    public ResponseEntity<List<TopicPayload>> getAll(
             @RequestParam(defaultValue = "0") @Min(0) final int page,
             @RequestParam(defaultValue = "20") @Range(min = 0, max = 1000) final int size,
             @RequestParam(defaultValue = "id") @Pattern(regexp = TOPIC_PROPERTIES) final String sortBy) {
-        return topicService.findAll(page, size, sortBy)
+        return ResponseEntity.ok(topicService.findAll(page, size, sortBy)
                 .stream()
                 .map(topic -> modelMapper.map(topic, TopicPayload.class))
-                .collect(Collectors.toSet());
+                .toList());
     }
 
     @GetMapping("/{id}")
@@ -55,12 +54,13 @@ public class TopicController {
     }
 
     @GetMapping("/{id}/posts")
-    public ResponseEntity<Set<PostPayload>> getByUserId(
+    public ResponseEntity<List<PostPayload>> getByUserId(
             @PathVariable @Min(1) final long id) {
         var optTopic = topicService.findById(id);
         return optTopic.map(topic -> ResponseEntity.ok(topic.getPosts().stream()
                         .map(post -> modelMapper.map(post, PostPayload.class))
-                        .collect(Collectors.toSet())))
+                        .sorted(Comparator.comparing(PostPayload::getCreatedAt).reversed())
+                        .toList()))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
@@ -68,7 +68,7 @@ public class TopicController {
     public ResponseEntity<TopicPayload> addOne(
             @RequestBody @Valid final TopicAddPayload payload) {
         return topicService.create(payload) ?
-                ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.badRequest().build();
+                ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
 
     }
 
@@ -76,7 +76,7 @@ public class TopicController {
     public ResponseEntity<TopicPayload> delete(
             @PathVariable @Min(1) final long id) {
         topicService.deleteById(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{id}")
@@ -84,7 +84,7 @@ public class TopicController {
             @RequestBody @Valid final TopicUpdatePayload payload,
             @PathVariable @Min(1) final long id) {
         return topicService.update(payload, id) ?
-                ResponseEntity.noContent().build() : ResponseEntity.badRequest().build();
+                ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
 

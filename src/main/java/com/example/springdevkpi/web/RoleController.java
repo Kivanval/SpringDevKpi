@@ -16,6 +16,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -35,14 +36,14 @@ public class RoleController {
     private static final String ROLE_PROPERTIES = "id|name";
 
     @GetMapping("/")
-    public Collection<RolePayload> getAll(
+    public ResponseEntity<List<RolePayload>> getAll(
             @RequestParam(defaultValue = "0") @Min(0) final int page,
             @RequestParam(defaultValue = "20") @Range(min = 0, max = 1000) final int size,
             @RequestParam(defaultValue = "id") @Pattern(regexp = ROLE_PROPERTIES) final String sortBy) {
-        return roleService.findAll(page, size, sortBy)
+        return ResponseEntity.ok(roleService.findAll(page, size, sortBy)
                 .stream()
                 .map(topic -> modelMapper.map(topic, RolePayload.class))
-                .collect(Collectors.toSet());
+                .toList());
     }
 
     @GetMapping("/{name}")
@@ -57,14 +58,14 @@ public class RoleController {
     public ResponseEntity<RolePayload> addOne(
             @RequestBody @Valid final RoleAddPayload payload) {
         return roleService.create(payload) ?
-                ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.badRequest().build();
+                ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/{name}")
     public ResponseEntity<RolePayload> deleteByName(
             @PathVariable @NotBlank final String name) {
         roleService.deleteByName(name);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{name}")
@@ -72,7 +73,7 @@ public class RoleController {
             @RequestBody @Valid final RoleUpdatePayload payload,
             @PathVariable @NotBlank final String name) {
         return roleService.update(payload, name) ?
-                ResponseEntity.noContent().build() : ResponseEntity.badRequest().build();
+                ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
 }

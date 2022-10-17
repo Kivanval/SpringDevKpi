@@ -16,6 +16,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -37,14 +39,14 @@ public class UserController {
     private static final String USER_PROPERTIES = "id|username|createdAt|role_id";
 
     @GetMapping("/")
-    public Collection<UserPayload> getAll(
+    public ResponseEntity<List<UserPayload>> getAll(
             @RequestParam(defaultValue = "0") @Min(0) final int page,
             @RequestParam(defaultValue = "20") @Range(min = 0, max = 1000) final int size,
             @RequestParam(defaultValue = "username") @Pattern(regexp = USER_PROPERTIES) final String sortBy) {
-        return userService.findAll(page, size, sortBy)
+        return ResponseEntity.ok(userService.findAll(page, size, sortBy)
                 .stream()
                 .map(user -> modelMapper.map(user, UserPayload.class))
-                .collect(Collectors.toSet());
+                .toList());
     }
 
     @GetMapping("/{username}")
@@ -56,12 +58,13 @@ public class UserController {
     }
 
     @GetMapping("/{username}/topics")
-    public ResponseEntity<Set<TopicPayload>> getTopicsByUsername(
+    public ResponseEntity<List<TopicPayload>> getTopicsByUsername(
             @PathVariable @Size(min = 5, max = 255) final String username) {
         var optUser = userService.findByUsername(username);
         return optUser.map(user -> ResponseEntity.ok(user.getTopics().stream()
                         .map(topic -> modelMapper.map(topic, TopicPayload.class))
-                        .collect(Collectors.toSet())))
+                        .sorted(Comparator.comparing(TopicPayload::getCreatedAt).reversed())
+                        .toList()))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
@@ -79,7 +82,7 @@ public class UserController {
     public ResponseEntity<UserPayload> deleteById(
             @PathVariable @Size(min = 5, max = 255) final String username) {
         userService.deleteByUsername(username);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{username}")
@@ -87,6 +90,6 @@ public class UserController {
             @RequestBody @Valid final UserUpdatePayload payload,
             @PathVariable @Size(min = 5, max = 255) final String username) {
         return userService.update(payload, username) ?
-                ResponseEntity.noContent().build() : ResponseEntity.badRequest().build();
+                ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 }

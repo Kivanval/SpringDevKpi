@@ -16,6 +16,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -35,14 +36,13 @@ public class PostController {
     private static final String POST_PROPERTIES = "id|createdAt|creatorId|topicId";
 
     @GetMapping("/")
-    public ResponseEntity<Collection<PostPayload>> getAll(
+    public ResponseEntity<List<PostPayload>> getAll(
             @RequestParam(defaultValue = "0") @Min(0) final int page,
             @RequestParam(defaultValue = "20") @Range(min = 0, max = 1000) final int size,
             @RequestParam(defaultValue = "id") @Pattern(regexp = POST_PROPERTIES) final String sortBy) {
         return ResponseEntity.ok(postService.findAll(page, size, sortBy).get()
                 .map(post -> modelMapper.map(post, PostPayload.class))
-                .collect(Collectors.toSet())
-        );
+                .toList());
     }
 
     @GetMapping("/{id}")
@@ -57,21 +57,21 @@ public class PostController {
     public ResponseEntity<PostPayload> addOne(
             @RequestBody @Valid final PostAddPayload payload) {
         return postService.create(payload) ?
-                ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.badRequest().build();
+                ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<PostPayload> delete(
             @PathVariable @Min(1) final long id) {
         postService.deleteById(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<RolePayload> update(
+    public ResponseEntity<PostPayload> update(
             @RequestBody @Valid final PostUpdatePayload payload,
             @PathVariable @Min(1) final long id) {
         return postService.update(payload, id) ?
-                ResponseEntity.noContent().build() : ResponseEntity.badRequest().build();
+                ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 }
