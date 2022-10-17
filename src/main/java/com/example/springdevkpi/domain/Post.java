@@ -27,7 +27,7 @@ public class Post {
     @JoinColumn(name = "creator_id")
     User creator;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "topic_id")
     Topic topic;
 
