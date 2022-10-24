@@ -30,7 +30,7 @@ public class Topic {
     @JoinColumn(name = "creator_id")
     User creator;
 
-    @OneToMany(mappedBy = "topic")
+    @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL)
     @Setter(AccessLevel.PRIVATE)
     @ToString.Exclude
     Set<Post> posts = new LinkedHashSet<>();

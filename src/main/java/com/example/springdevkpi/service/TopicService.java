@@ -3,11 +3,12 @@ package com.example.springdevkpi.service;
 import com.example.springdevkpi.data.TopicRepository;
 import com.example.springdevkpi.data.UserRepository;
 import com.example.springdevkpi.domain.Topic;
-import com.example.springdevkpi.web.transfer.TopicAddPayload;
-import com.example.springdevkpi.web.transfer.TopicUpdatePayload;
+import com.example.springdevkpi.web.data.transfer.TopicAddPayload;
+import com.example.springdevkpi.web.data.transfer.TopicUpdatePayload;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -63,16 +64,20 @@ public class TopicService {
         return false;
     }
 
-    public Page<Topic> findAll(Pageable pageable) {
-        return topicRepository.findAll(pageable);
-    }
-
+    @Transactional
     public Optional<Topic> findById(Long id) {
         return topicRepository.findById(id);
     }
 
+    @Transactional
     public void deleteById(Long id) {
         if (topicRepository.existsById(id))
             topicRepository.deleteById(id);
+    }
+
+    @Transactional
+    public Page<Topic> findAll(int page, int size, String sortBy) {
+        Pageable pageable = PageRequest.of(page, size).withSort(Sort.by(sortBy).descending());
+        return topicRepository.findAll(pageable);
     }
 }

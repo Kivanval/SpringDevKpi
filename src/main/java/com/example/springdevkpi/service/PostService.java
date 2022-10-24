@@ -4,12 +4,14 @@ import com.example.springdevkpi.data.PostRepository;
 import com.example.springdevkpi.data.TopicRepository;
 import com.example.springdevkpi.data.UserRepository;
 import com.example.springdevkpi.domain.Post;
-import com.example.springdevkpi.web.transfer.PostAddPayload;
-import com.example.springdevkpi.web.transfer.PostUpdatePayload;
+import com.example.springdevkpi.web.data.transfer.PostAddPayload;
+import com.example.springdevkpi.web.data.transfer.PostUpdatePayload;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,7 +68,8 @@ public class PostService {
     }
 
     @Transactional
-    public Page<Post> findAll(Pageable pageable) {
+    public Page<Post> findAll(int page, int size, String sortBy) {
+        Pageable pageable = PageRequest.of(page, size).withSort(Sort.by(sortBy).descending());
         return postRepository.findAll(pageable);
     }
 
