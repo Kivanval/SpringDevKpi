@@ -32,12 +32,12 @@ public class User {
     @JoinColumn(name = "role_id")
     Role role;
 
-    @OneToMany(mappedBy = "creator")
+    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
     @Setter(AccessLevel.PRIVATE)
     @ToString.Exclude
     Set<Topic> topics = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "creator")
+    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
     @Setter(AccessLevel.PRIVATE)
     @ToString.Exclude
     Set<Post> posts = new LinkedHashSet<>();

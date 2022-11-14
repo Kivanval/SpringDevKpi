@@ -20,7 +20,9 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     Long id;
+    @Column(nullable = false)
     String text;
+    @Column(nullable = false)
     LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne

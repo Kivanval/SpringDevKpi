@@ -35,7 +35,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(username));
         Set<SimpleGrantedAuthority> authorities = Stream.concat(
                         Stream.of(user.getRole()),
-                        roleRepository.findByRankLessThan(user.getRole().getRank()).stream()).
+                        roleRepository.findByRankGreaterThan(user.getRole().getRank()).stream()).
                 map(role -> new SimpleGrantedAuthority(ROLE_PREFIX + role.getName()))
                 .collect(Collectors.toSet());
         return new UserDetailsImpl(user, authorities);

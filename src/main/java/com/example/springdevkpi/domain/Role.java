@@ -25,7 +25,8 @@ public class Role {
     @Column(nullable = false, unique = true)
     String name;
 
-    int rank = 1;
+    @Column(nullable = false)
+    int rank;
 
     @OneToMany(mappedBy = "role")
     @ToString.Exclude

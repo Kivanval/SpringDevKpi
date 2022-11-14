@@ -22,8 +22,11 @@ public class Topic {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     Long id;
+    @Column(nullable = false)
     String title;
+    @Column(nullable = false)
     String description;
+    @Column(nullable = false)
     LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne

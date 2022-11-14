@@ -20,8 +20,8 @@ public class RoleLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        roleService.create(new RoleAddPayload(DefaultRoles.USER, 1));
+        roleService.create(new RoleAddPayload(DefaultRoles.USER, 3));
         roleService.create(new RoleAddPayload(DefaultRoles.ADMIN, 2));
-        roleService.create(new RoleAddPayload(DefaultRoles.SUPER_ADMIN, 3));
+        roleService.create(new RoleAddPayload(DefaultRoles.SUPER_ADMIN, 1));
     }
 }

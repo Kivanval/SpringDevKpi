@@ -34,7 +34,7 @@ public class TopicController {
 
     private static final String TOPIC_PROPERTIES = "id|title|createdAt|creatorId";
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<TopicPayload>> getAll(
             @RequestParam(defaultValue = "0") @Min(0) final int page,
             @RequestParam(defaultValue = "20") @Range(min = 0, max = 1000) final int size,
@@ -64,7 +64,7 @@ public class TopicController {
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<TopicPayload> addOne(
             @RequestBody @Valid final TopicAddPayload payload) {
         return topicService.create(payload) ?

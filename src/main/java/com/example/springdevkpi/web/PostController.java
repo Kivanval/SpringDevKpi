@@ -4,20 +4,16 @@ import com.example.springdevkpi.service.PostService;
 import com.example.springdevkpi.web.data.transfer.PostAddPayload;
 import com.example.springdevkpi.web.data.transfer.PostPayload;
 import com.example.springdevkpi.web.data.transfer.PostUpdatePayload;
-import com.example.springdevkpi.web.data.transfer.RolePayload;
 import org.hibernate.validator.constraints.Range;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/posts")
@@ -35,7 +31,7 @@ public class PostController {
 
     private static final String POST_PROPERTIES = "id|createdAt|creatorId|topicId";
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<PostPayload>> getAll(
             @RequestParam(defaultValue = "0") @Min(0) final int page,
             @RequestParam(defaultValue = "20") @Range(min = 0, max = 1000) final int size,
@@ -53,7 +49,7 @@ public class PostController {
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<PostPayload> addOne(
             @RequestBody @Valid final PostAddPayload payload) {
         return postService.create(payload) ?

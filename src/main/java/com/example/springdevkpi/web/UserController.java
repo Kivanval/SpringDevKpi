@@ -15,7 +15,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -38,7 +37,7 @@ public class UserController {
 
     private static final String USER_PROPERTIES = "id|username|createdAt|role_id";
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<UserPayload>> getAll(
             @RequestParam(defaultValue = "0") @Min(0) final int page,
             @RequestParam(defaultValue = "20") @Range(min = 0, max = 1000) final int size,

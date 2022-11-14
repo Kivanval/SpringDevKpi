@@ -35,7 +35,7 @@ public class RoleController {
 
     private static final String ROLE_PROPERTIES = "id|name";
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<RolePayload>> getAll(
             @RequestParam(defaultValue = "0") @Min(0) final int page,
             @RequestParam(defaultValue = "20") @Range(min = 0, max = 1000) final int size,
