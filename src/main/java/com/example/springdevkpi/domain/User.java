@@ -5,7 +5,6 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Objects;
