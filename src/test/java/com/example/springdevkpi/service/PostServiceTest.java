@@ -3,6 +3,7 @@ package com.example.springdevkpi.service;
 import com.example.springdevkpi.data.PostRepository;
 import com.example.springdevkpi.data.TopicRepository;
 import com.example.springdevkpi.data.UserRepository;
+import com.example.springdevkpi.web.data.transfer.Credentials;
 import com.example.springdevkpi.web.data.transfer.PostAddPayload;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,8 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
@@ -66,12 +66,12 @@ class PostServiceTest {
 
     @Test
     void shouldDeleteById() {
+        userService.signUp(new Credentials("TESTER", "12345678"),DefaultRoles.SUPER_ADMIN);
         var payload = new PostAddPayload("TEST", "TESTER", 1L);
         postService.create(payload);
-        var posts = postService.findAll(1,1,"id");
-        var post = posts.get().findFirst();
-        assertTrue(post.isPresent());
-        var postId = posts.get().findFirst().get().getId();
-        assertTrue(postService.findById(postId).isPresent());
+        assertEquals(1,postService.findAll(0,1,"id").getSize());
+        var posts = postRepository.findAllByCreator(userRepository.findByUsername("TESTER").get());
+        assertFalse(posts.isEmpty());
+        assertTrue(postService.findById(posts.get(0).getId()).isPresent());
     }
 }
