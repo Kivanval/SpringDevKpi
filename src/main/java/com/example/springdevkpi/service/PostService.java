@@ -35,23 +35,21 @@ public class PostService {
     }
 
     @Transactional
-    public boolean create(PostAddPayload payload) {
+    public Post create(PostAddPayload payload) {
         var optCreator = userRepository.findByUsername(payload.getCreatorUsername());
         if (optCreator.isEmpty()) {
             log.warn("Creator by username {} doesn't exists", payload.getCreatorUsername());
-            return false;
         }
         var optTopic = topicRepository.findById(payload.getTopicId());
         if (optTopic.isEmpty()) {
             log.warn("Topic by id {} doesn't exists", payload.getTopicId());
-            return false;
         }
         var post = new Post();
-        post.setCreator(optCreator.get());
-        post.setTopic(optTopic.get());
+        post.setCreator(optCreator.orElseThrow());
+        post.setTopic(optTopic.orElseThrow());
         post.setText(payload.getText().strip());
         postRepository.save(post);
-        return true;
+        return postRepository.save(post);
     }
 
     @Transactional

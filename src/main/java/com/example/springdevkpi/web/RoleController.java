@@ -57,8 +57,7 @@ public class RoleController {
     @PostMapping("/")
     public ResponseEntity<RolePayload> addOne(
             @RequestBody @Valid final RoleAddPayload payload) {
-        return roleService.create(payload) ?
-                ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(modelMapper.map(roleService.create(payload), RolePayload.class));
     }
 
     @DeleteMapping("/{name}")

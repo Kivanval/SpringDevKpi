@@ -26,12 +26,11 @@ public class RoleService {
     }
 
     @Transactional
-    public boolean create(RoleAddPayload payload) {
+    public Role create(RoleAddPayload payload) {
         var role = new Role();
         role.setName(payload.getName().toUpperCase());
-        role.setRank(payload.getRank());
-        roleRepository.save(role);
-        return true;
+        role.setRank(payload.getRank());;
+        return roleRepository.save(role);
     }
 
     @Transactional

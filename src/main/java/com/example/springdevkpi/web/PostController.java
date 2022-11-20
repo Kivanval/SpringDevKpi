@@ -52,8 +52,7 @@ public class PostController {
     @PostMapping
     public ResponseEntity<PostPayload> addOne(
             @RequestBody @Valid final PostAddPayload payload) {
-        return postService.create(payload) ?
-                ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(modelMapper.map(postService.create(payload), PostPayload.class));
     }
 
     @DeleteMapping("/{id}")

@@ -24,7 +24,9 @@ public class User {
     Long id;
     @Column(nullable = false, unique = true)
     String username;
+    @Column(nullable = false)
     String password;
+    @Column(nullable = false)
     LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne
