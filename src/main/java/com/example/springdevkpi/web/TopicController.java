@@ -67,8 +67,7 @@ public class TopicController {
     @PostMapping
     public ResponseEntity<TopicPayload> addOne(
             @RequestBody @Valid final TopicAddPayload payload) {
-        return topicService.create(payload) ?
-                ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(modelMapper.map(topicService.create(payload), TopicPayload.class));
 
     }
 

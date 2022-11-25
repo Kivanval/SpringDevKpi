@@ -29,8 +29,16 @@ public class Role {
     int rank;
 
     @OneToMany(mappedBy = "role")
+    @Setter(AccessLevel.PRIVATE)
     @ToString.Exclude
     Set<User> users = new LinkedHashSet<>();
+
+    public void addUser(User user) {
+        Objects.requireNonNull(user, "Impossible to add null values to relations");
+        users.add(user);
+        user.setRole(this);
+    }
+
 
     @Override
     public boolean equals(Object o) {

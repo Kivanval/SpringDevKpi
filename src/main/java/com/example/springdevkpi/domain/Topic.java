@@ -38,6 +38,12 @@ public class Topic {
     @ToString.Exclude
     Set<Post> posts = new LinkedHashSet<>();
 
+    public void addPost(Post post) {
+        Objects.requireNonNull(post, "Impossible to add null values to relations");
+        posts.add(post);
+        post.setTopic(this);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

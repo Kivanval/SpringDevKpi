@@ -2,7 +2,6 @@ package com.example.springdevkpi.service;
 
 import com.example.springdevkpi.data.RoleRepository;
 import com.example.springdevkpi.data.UserRepository;
-import com.example.springdevkpi.domain.User;
 import com.example.springdevkpi.web.data.transfer.RoleAddPayload;
 import com.example.springdevkpi.web.data.transfer.RoleUpdatePayload;
 import org.junit.jupiter.api.AfterEach;
@@ -12,11 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Pageable;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static com.example.springdevkpi.service.TestHelper.getTopicForTest;
 import static com.example.springdevkpi.service.TestHelper.getUserForTest;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class RoleServiceTest {
@@ -47,15 +43,14 @@ class RoleServiceTest {
 
         roleService.create(payload);
 
-        assertTrue(roleRepository.findByName("TEST").isPresent());
+        assertTrue(roleRepository.existsByName("TEST"));
     }
 
     @Test
     void shouldSetFieldsFromPayload() {
         var payload = new RoleAddPayload("TEST", 1);
-        roleService.create(payload);
-        var role = roleService.findByName("TEST")
-                .orElseThrow(AssertionError::new);
+
+        var role = roleService.create(payload);
 
         assertEquals("TEST", role.getName());
         assertEquals(1, role.getRank());
@@ -87,7 +82,7 @@ class RoleServiceTest {
         roleService.create(payload1);
         roleService.create(payload2);
 
-        assertEquals(2, roleRepository.findAll(Pageable.ofSize(2)).getSize());
+        assertEquals(2, roleService.findAll(0, 2, "id").getSize());
     }
 
     @Test
@@ -97,18 +92,19 @@ class RoleServiceTest {
         roleService.create(payload);
         roleService.deleteByName("TEST");
 
-        assertTrue(roleRepository.findByName("TEST").isEmpty());
+        assertFalse(roleRepository.existsByName("TEST"));
     }
 
     @Test
-    void shouldDeleteByNameWithRelatedUsers() {
+    void shouldDeleteByNameAllRelatedUsers() {
         var payload = new RoleAddPayload("TEST", 1);
         var user = getUserForTest();
 
-        user.setRole(roleService.create(payload));
+        var role = roleService.create(payload);
+        role.addUser(user);
         roleService.deleteByName("TEST");
 
-        assertTrue(userRepository.findByUsername("TESTER").isEmpty());
+        assertFalse(userRepository.existsByUsername("TESTER"));
     }
 
     @Test
@@ -118,11 +114,11 @@ class RoleServiceTest {
 
         roleService.create(payload);
         var isUpdated = roleService.update(updatePayload, "TEST");
-        var role = roleRepository.findByName("NEW_TEST")
+        var updatedRole = roleService.findByName("NEW_TEST")
                 .orElseThrow(AssertionError::new);
 
         assertTrue(isUpdated);
-        assertEquals("NEW_TEST", role.getName());
-        assertEquals(2, role.getRank());
+        assertEquals("NEW_TEST", updatedRole.getName());
+        assertEquals(2, updatedRole.getRank());
     }
 }

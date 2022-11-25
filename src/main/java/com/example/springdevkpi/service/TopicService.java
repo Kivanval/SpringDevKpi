@@ -31,19 +31,17 @@ public class TopicService {
     }
 
     @Transactional
-    public boolean create(TopicAddPayload payload) {
+    public Topic create(TopicAddPayload payload) {
         var optCreator = userRepository.findByUsername(payload.getCreatorUsername());
         if (optCreator.isEmpty()) {
             log.warn("Creator by username {} doesn't exists", payload.getCreatorUsername());
-            return false;
         }
         var topic = new Topic();
-        topic.setCreator(optCreator.get());
+        topic.setCreator(optCreator.orElseThrow());
         topic.setTitle(payload.getTitle().strip());
         topic.setDescription(payload.getDescription().strip());
-        topic.setCreator(optCreator.get());
-        topicRepository.save(topic);
-        return true;
+        topic.setCreator(optCreator.orElseThrow());
+        return topicRepository.save(topic);
     }
 
     @Transactional
